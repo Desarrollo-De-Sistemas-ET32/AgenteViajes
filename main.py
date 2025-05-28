@@ -4,7 +4,7 @@ from together import Together
 import os
 
 # Configurar la clave de API (mejor usar variables de entorno en producción)
-os.environ["TOGETHER_API_KEY"] = "26ce9918867389015537f67e5eb62ef6ca4b5965f25979449434f640229319ab"
+# -> IMPORTANTE os.environ["TOGETHER_API_KEY"] = "api-key"
 
 # Inicializar cliente de Together AI
 client = Together()
