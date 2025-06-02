@@ -1,14 +1,7 @@
-// src/app.module.ts
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { UploadModule } from './upload/upload.module';
+import { UploadController } from './files-api/upload.controller';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    UploadModule,
-  ],
+  controllers: [UploadController],
 })
 export class AppModule {}
