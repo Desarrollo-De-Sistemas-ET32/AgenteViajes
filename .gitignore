@@ -107,6 +107,7 @@ yarn.lock
 .env.test
 .env.production
 
+
 # Directorios de compilación/producción
 /dist/
 /build/
@@ -114,7 +115,8 @@ yarn.lock
 /.next/
 /.nuxt/
 /.output/
-
+/server.key/
+/server.cert/
 # Cache
 .cache/
 .parcel-cache/
