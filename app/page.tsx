@@ -1,11 +1,11 @@
+// app/page.tsx
 import { auth0 } from "@/lib/auth0";
+import ApiCaller from "./components/ApiCaller";
 import './globals.css';
 
 export default async function Home() {
-  // Fetch the user session
   const session = await auth0.getSession();
 
-  // If no session, show sign-up and login buttons
   if (!session) {
     return (
       <main>
@@ -19,7 +19,6 @@ export default async function Home() {
     );
   }
 
-  // If session exists, show a welcome message and logout button
   return (
     <main>
       <h1>Welcome, {session.user.name}!</h1>
@@ -28,6 +27,9 @@ export default async function Home() {
           <button>Log out</button>
         </a>
       </p>
+
+      {/* Llamado a la API desde componente cliente */}
+      <ApiCaller />
     </main>
   );
 }
