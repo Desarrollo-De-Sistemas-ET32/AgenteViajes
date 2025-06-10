@@ -13,159 +13,100 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 
 -- -----------------------------------------------------
 -- Schema mydb
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+-- Crear esquema
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8;
+USE `mydb`;
 
--- -----------------------------------------------------
--- Table `mydb`.`Hotel`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Hotel` (
+-- Tabla Hotel
+CREATE TABLE IF NOT EXISTS `Hotel` (
   `ID_Hotel` INT NOT NULL AUTO_INCREMENT,
   `Hotel_name` VARCHAR(45) NULL,
   `Location` VARCHAR(45) NULL,
-  `Stars` INT(5) NULL,
-  `ID_Travel` INT NULL,
-  PRIMARY KEY (`ID_Hotel`))
-ENGINE = InnoDB;
+  `Stars` INT NULL,
+  PRIMARY KEY (`ID_Hotel`)
+) ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`Flights`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Flights` (
-  `ID_Flight` INT NOT NULL,
+-- Tabla Flights
+CREATE TABLE IF NOT EXISTS `Flights` (
+  `ID_Flight` INT NOT NULL AUTO_INCREMENT,
   `ID_User` INT NULL,
   `Start_date` DATETIME NULL,
   `End_date` DATETIME NULL,
-  `Total_cost` INT NULL,
+  `Total_cost` DECIMAL(10,2) NULL,
   `Destination` VARCHAR(45) NULL,
-  PRIMARY KEY (`ID_Flight`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`ID_Flight`)
+) ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`Travel`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Travel` (
-  `ID_Travel` INT NOT NULL,
+-- Tabla Travel
+CREATE TABLE IF NOT EXISTS `Travel` (
+  `ID_Travel` INT NOT NULL AUTO_INCREMENT,
   `ID_User` INT NULL,
   `Start_date` DATETIME NULL,
   `End_time` DATETIME NULL,
-  `Total_cost` INT NULL,
-  PRIMARY KEY (`ID_Travel`))
-ENGINE = InnoDB;
+  `Total_cost` DECIMAL(10,2) NULL,
+  PRIMARY KEY (`ID_Travel`)
+) ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`User`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`User` (
-  `ID_User` INT NOT NULL,
-  `Name` VARCHAR(45) NOT NULL,
-  `Surname` VARCHAR(45) NOT NULL,
-  `Email` VARCHAR(60) NOT NULL,
-  `Phone_number` INT(45) NOT NULL,
-  `Address` VARCHAR(45) NOT NULL,
-  `MemberShip` TINYINT NULL,
-  `ID_Payments` INT NULL,
-  `Hotel_ID_Hotel` INT NOT NULL,
-  `Flights_ID_Flight` INT NOT NULL,
-  `Travel_ID_Travel` INT NOT NULL,
-  PRIMARY KEY (`ID_User`, `Hotel_ID_Hotel`, `Flights_ID_Flight`, `Travel_ID_Travel`),
-  INDEX `fk_User_Hotel1_idx` (`Hotel_ID_Hotel` ASC) VISIBLE,
-  INDEX `fk_User_Flights1_idx` (`Flights_ID_Flight` ASC) VISIBLE,
-  INDEX `fk_User_Travel1_idx` (`Travel_ID_Travel` ASC) VISIBLE,
-  CONSTRAINT `fk_User_Hotel1`
-    FOREIGN KEY (`Hotel_ID_Hotel`)
-    REFERENCES `mydb`.`Hotel` (`ID_Hotel`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_User_Flights1`
-    FOREIGN KEY (`Flights_ID_Flight`)
-    REFERENCES `mydb`.`Flights` (`ID_Flight`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_User_Travel1`
-    FOREIGN KEY (`Travel_ID_Travel`)
-    REFERENCES `mydb`.`Travel` (`ID_Travel`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Activity`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Activity` (
-  `ID_Activity` INT NOT NULL,
+-- Tabla Activity
+CREATE TABLE IF NOT EXISTS `Activity` (
+  `ID_Activity` INT NOT NULL AUTO_INCREMENT,
   `Activity_Name` VARCHAR(45) NULL,
   `Location` VARCHAR(45) NULL,
-  `Cost` VARCHAR(45) NULL,
+  `Cost` DECIMAL(10,2) NULL,
   `Duration` VARCHAR(45) NULL,
-  `ID_Travel` VARCHAR(45) NULL,
-  PRIMARY KEY (`ID_Activity`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`ID_Activity`)
+) ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`Payments`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Payments` (
-  `ID_Payments` INT NOT NULL,
+-- Tabla Payments
+CREATE TABLE IF NOT EXISTS `Payments` (
+  `ID_Payments` INT NOT NULL AUTO_INCREMENT,
   `Status` VARCHAR(45) NULL,
   `Payment_Date` DATETIME NULL,
   `Payment_method` VARCHAR(45) NULL,
   `Transaction_Code` VARCHAR(45) NULL,
-  PRIMARY KEY (`ID_Payments`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`ID_Payments`)
+) ENGINE = InnoDB;
 
+-- Tabla User
+CREATE TABLE IF NOT EXISTS `User` (
+  `ID_User` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(45) NOT NULL,
+  `Surname` VARCHAR(45) NOT NULL,
+  `Email` VARCHAR(60) NOT NULL,
+  `Phone_number` VARCHAR(20) NOT NULL,
+  `Address` VARCHAR(45) NOT NULL,
+  `MemberShip` TINYINT NULL,
+  PRIMARY KEY (`ID_User`)
+) ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- Table `mydb`.`User_has_Payments`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`User_has_Payments` (
+-- Relación Usuario - Pagos (N:M)
+CREATE TABLE IF NOT EXISTS `User_has_Payments` (
   `User_ID_User` INT NOT NULL,
   `Payments_ID_Payments` INT NOT NULL,
   PRIMARY KEY (`User_ID_User`, `Payments_ID_Payments`),
-  INDEX `fk_User_has_Payments_Payments1_idx` (`Payments_ID_Payments` ASC) VISIBLE,
-  INDEX `fk_User_has_Payments_User_idx` (`User_ID_User` ASC) VISIBLE,
-  CONSTRAINT `fk_User_has_Payments_User`
-    FOREIGN KEY (`User_ID_User`)
-    REFERENCES `mydb`.`User` (`ID_User`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_User_has_Payments_Payments1`
-    FOREIGN KEY (`Payments_ID_Payments`)
-    REFERENCES `mydb`.`Payments` (`ID_Payments`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  FOREIGN KEY (`User_ID_User`) REFERENCES `User` (`ID_User`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (`Payments_ID_Payments`) REFERENCES `Payments` (`ID_Payments`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`Travel_has_Activity`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Travel_has_Activity` (
+-- Relación Travel - Activity (N:M)
+CREATE TABLE IF NOT EXISTS `Travel_has_Activity` (
   `Travel_ID_Travel` INT NOT NULL,
   `Activity_ID_Activity` INT NOT NULL,
   PRIMARY KEY (`Travel_ID_Travel`, `Activity_ID_Activity`),
-  INDEX `fk_Travel_has_Activity_Activity1_idx` (`Activity_ID_Activity` ASC) VISIBLE,
-  INDEX `fk_Travel_has_Activity_Travel1_idx` (`Travel_ID_Travel` ASC) VISIBLE,
-  CONSTRAINT `fk_Travel_has_Activity_Travel1`
-    FOREIGN KEY (`Travel_ID_Travel`)
-    REFERENCES `mydb`.`Travel` (`ID_Travel`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Travel_has_Activity_Activity1`
-    FOREIGN KEY (`Activity_ID_Activity`)
-    REFERENCES `mydb`.`Activity` (`ID_Activity`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  FOREIGN KEY (`Travel_ID_Travel`) REFERENCES `Travel` (`ID_Travel`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (`Activity_ID_Activity`) REFERENCES `Activity` (`ID_Activity`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
