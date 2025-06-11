@@ -1,15 +1,30 @@
-import { Post, UseInterceptors, UploadedFile, Controller } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { 
+  Controller, 
+  Post, 
+  Req, 
+  Res, 
+  HttpStatus, 
+  BadRequestException 
+} from '@nestjs/common';
+import { Request, Response } from 'express';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { UseGuards } from '@nestjs/common';
 import { FileService } from './file.service';
 
-@Controller('file') // Base route for file-related operations
+@Controller('file')
+@UseGuards(ThrottlerGuard)
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
-  @Post('upload') // Endpoint for uploading files
-  @UseInterceptors(FileInterceptor('file')) // Intercept and handle file uploads
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    // Delegate file handling to the FileService
-    return await this.fileService.uploadFile(file);
+  @Post('upload')
+  @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 subidas por minuto por ip
+  async uploadFile(@Req() req: Request, @Res() res: Response) {
+    try {
+      const result = await this.fileService.uploadFile(req);
+      res.status(HttpStatus.OK).json(result);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
+

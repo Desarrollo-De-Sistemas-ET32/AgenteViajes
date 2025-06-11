@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UploadController } from './files-endpoint/upload.controller';
+import { FileModule } from './files-endpoint/file.module';
 
 @Module({
-  controllers: [UploadController],
+  imports: [FileModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
+
+
