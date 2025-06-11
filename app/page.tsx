@@ -29,7 +29,7 @@ export default async function Home() {
       </p>
 
       {/* Llamado a la API desde componente cliente */}
-      <ApiCaller />
+      {/*<ApiCaller />*/}
     </main>
   );
 }

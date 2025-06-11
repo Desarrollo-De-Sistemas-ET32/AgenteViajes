@@ -12,7 +12,7 @@ export default function ApiCaller() {
         const resToken = await fetch('/api/auth/token');
         const { accessToken } = await resToken.json();
 
-        const res = await fetch('http://localhost:3001/api/private', {
+        const res = await fetch('http://localhost:5000/api/private', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
