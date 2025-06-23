@@ -1,0 +1,65 @@
+# npm audit report
+
+brace-expansion  2.0.1 - 4.0.0
+brace-expansion Regular Expression Denial of Service vulnerability - https://github.com/advisories/GHSA-v6h2-p8h4-qcjw
+fix available via `npm audit fix --force`
+Will install @swc/cli@0.1.63, which is a breaking change
+node_modules/@swc/cli/node_modules/brace-expansion
+node_modules/@typescript-eslint/typescript-estree/node_modules/brace-expansion
+node_modules/filelist/node_modules/brace-expansion
+node_modules/glob/node_modules/brace-expansion
+  minimatch  5.0.0 - 9.0.5 || 10.0.1
+  Depends on vulnerable versions of brace-expansion
+  node_modules/@swc/cli/node_modules/minimatch
+  node_modules/@typescript-eslint/typescript-estree/node_modules/minimatch
+  node_modules/filelist/node_modules/minimatch
+  node_modules/glob/node_modules/minimatch
+    @swc/cli  >=0.1.64
+    Depends on vulnerable versions of minimatch
+    node_modules/@swc/cli
+    @typescript-eslint/typescript-estree  >=6.16.0
+    Depends on vulnerable versions of minimatch
+    node_modules/@typescript-eslint/typescript-estree
+      @typescript-eslint/parser  >=6.16.0
+      Depends on vulnerable versions of @typescript-eslint/typescript-estree
+      node_modules/@typescript-eslint/parser
+        @typescript-eslint/eslint-plugin  >=6.16.0
+        Depends on vulnerable versions of @typescript-eslint/parser
+        Depends on vulnerable versions of @typescript-eslint/type-utils
+        Depends on vulnerable versions of @typescript-eslint/utils
+        node_modules/@typescript-eslint/eslint-plugin
+        typescript-eslint  *
+        Depends on vulnerable versions of @typescript-eslint/eslint-plugin
+        Depends on vulnerable versions of @typescript-eslint/parser
+        Depends on vulnerable versions of @typescript-eslint/utils
+        node_modules/typescript-eslint
+      @typescript-eslint/type-utils  >=6.16.0
+      Depends on vulnerable versions of @typescript-eslint/typescript-estree
+      Depends on vulnerable versions of @typescript-eslint/utils
+      node_modules/@typescript-eslint/type-utils
+      @typescript-eslint/utils  >=6.16.0
+      Depends on vulnerable versions of @typescript-eslint/typescript-estree
+      node_modules/@typescript-eslint/utils
+    filelist  >=1.0.3
+    Depends on vulnerable versions of minimatch
+    node_modules/filelist
+      jake  >=10.8.6
+      Depends on vulnerable versions of filelist
+      node_modules/jake
+
+multer  1.4.4-lts.1 - 2.0.0
+Severity: high
+Multer vulnerable to Denial of Service via unhandled exception - https://github.com/advisories/GHSA-g5hg-p3ph-g8qg
+fix available via `npm audit fix`
+node_modules/multer
+  @nestjs/platform-express  8.2.4 - 10.4.18 || 11.0.0-next.1 - 11.1.2
+  Depends on vulnerable versions of multer
+  node_modules/@nestjs/platform-express
+
+13 vulnerabilities (11 low, 2 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
