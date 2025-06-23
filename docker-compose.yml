@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: AmelieDB
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: AmelieSQL
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: 123
+    ports:
+      - "3306:3307"
+    volumes:
+      - mysql_data:/var/mysql
+
+volumes:
+  mysql_data:
