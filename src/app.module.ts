@@ -19,7 +19,7 @@ import { FileModule } from './files-endpoint/file.module';
       port: 3306,
       username: 'root',
       password: '',
-      database: 'mydb',
+      database: 'amelieSQL',
       entities: [Hotel, Flights, Travel, User],
       synchronize: false,
       logging: true,
