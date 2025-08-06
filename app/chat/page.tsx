@@ -1,3 +1,4 @@
+'use client'
 import { ChatInterface, ChatInterfaceProps } from "@/components/ChatInterface"
 import { Router, useRouter } from "next/router";
 
