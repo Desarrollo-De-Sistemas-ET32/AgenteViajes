@@ -78,7 +78,7 @@ export const ChatInterface = ({ onBack }: ChatInterfaceProps) => {
   };
 
   return (
-    <div className="flex flex-col h-screen max-w-lg mx-auto bg-card shadow-dashboard border border-border rounded-lg overflow-hidden">
+    <div className="flex flex-col dvh md:h-screen w-full max-w-fulenl md-max-w3xl lg:max4xl md:mx-auto bg-card shadow-dashboard border border-border rounded-none md:rounded-xl overflow-hidd">
       {onBack && (
         <div className="p-4 bg-muted/30">
           <div className="flex items-center justify-between">

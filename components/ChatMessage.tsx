@@ -16,7 +16,7 @@ export const ChatMessage = ({ message, isUser, timestamp }: ChatMessageProps) =>
       isUser ? "justify-end" : "justify-start"
     )}>
       {!isUser && (
-        <Avatar className="h-8 w-8 flex-shrink-0">
+        <Avatar className="h-8 w-8 md:h-9 md:w-9 flex-shrink-0">
           <AvatarFallback className="bg-gradient-dashboard text-white text-xs">
             <Bot className="h-4 w-4" />
           </AvatarFallback>
@@ -24,12 +24,12 @@ export const ChatMessage = ({ message, isUser, timestamp }: ChatMessageProps) =>
       )}
       
       <div className={cn(
-        "max-w-[70%] px-4 py-3 rounded-2xl shadow-sm transition-all duration-300",
+        "max-w-[85%] sm:max-w-[75%] md:max-w-[65%] lg:max-w-[60%] px-4 md:px-5 py-3 md:py-3.5 rounded-2xl shadow-sm transition-all duration-300",
         isUser 
           ? "bg-gradient-button text-white rounded-br-md shadow-card" 
           : "bg-card border border-border rounded-bl-md hover:shadow-md"
       )}>
-        <p className="text-sm leading-relaxed">{message}</p>
+        <p className="text-sm md:text-base leading-relaxed">{message}</p>
         {timestamp && (
           <div className="flex items-center justify-between mt-2">
             <Badge variant="secondary" className={cn(
@@ -43,7 +43,7 @@ export const ChatMessage = ({ message, isUser, timestamp }: ChatMessageProps) =>
       </div>
 
       {isUser && (
-        <Avatar className="h-8 w-8 flex-shrink-0">
+        <Avatar className="h-8 w-8 md:h-9 md:w-9 flex-shrink-0">
           <AvatarFallback className="bg-muted text-muted-foreground text-xs">
             <User className="h-4 w-4" />
           </AvatarFallback>
