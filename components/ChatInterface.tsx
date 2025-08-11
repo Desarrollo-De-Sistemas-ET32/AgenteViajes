@@ -1,3 +1,4 @@
+'use client'
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useRouter } from "next/navigation";
 
 export interface ChatInterfaceProps {
   onBack?: () => void;
@@ -41,7 +43,7 @@ const initialMessages: Message[] = [
 
 export const ChatInterface = ({ onBack }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
-
+  const router = useRouter();
   const handleSendMessage = (text: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
@@ -85,7 +87,7 @@ export const ChatInterface = ({ onBack }: ChatInterfaceProps) => {
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={onBack}
+              onClick={onBack=()=> {router.back()}}
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4" />
