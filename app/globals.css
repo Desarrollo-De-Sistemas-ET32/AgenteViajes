@@ -120,3 +120,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.bg-gradient-button {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+}

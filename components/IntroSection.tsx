@@ -1,9 +1,12 @@
+'use client'
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MessageCircle, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const IntroSection = () => {
+  const router = useRouter();
   return (
     <div className="px-6 mb-16">
       <Card className="w-full p-12 bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -19,10 +22,11 @@ const IntroSection = () => {
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             Charle con Amélie, su nueva organizadora de experiencias inolvidables.
           </p>
-          <Button 
+          <Button onClick={() => router.push("/chat") } 
             size="lg" 
             className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
+            
             <Sparkles className="h-5 w-5 mr-2" />
             Comenzar Chat
           </Button>
