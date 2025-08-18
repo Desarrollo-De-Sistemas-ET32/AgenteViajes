@@ -2,10 +2,10 @@
 import { Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { auth0 } from "@/lib/auth0";
+// import { auth0 } from "@/lib/auth0";
 
-const Navbar = async () => {
-  const session = await auth0.getSession();
+const Navbar = () => {
+// const session = await auth0.getSession();
 
   return (
     <nav className="w-full px-6 py-4 flex items-center justify-between bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
@@ -33,7 +33,9 @@ const Navbar = async () => {
           <Menu className="h-5 w-5" />
         </Button>
 
-        {/* Auth buttons */}
+        {/* Auth buttons 
+        
+        
         {!session ? (
           <>
             <Link href="/auth/login?screen_hint=signup">
@@ -58,7 +60,10 @@ const Navbar = async () => {
               </Button>
             </Link>
           </>
-        )}
+        )}*/
+        
+        }
+        
       </div>
     </nav>
   );
