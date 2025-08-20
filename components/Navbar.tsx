@@ -1,12 +1,22 @@
 // components/Navbar.tsx
+'use client';
 import { Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { auth0 } from "@/lib/auth0";
+import { useState } from "react";
+import PaymentComponent from '@/components/MP_Payment';
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from '@/components/ui/dialog';
 
-const Navbar = async () => {
-  const session = await auth0.getSession();
 
+interface Session {
+  user: {
+    name?: string;
+    // Agrega más propiedades del usuario si las usas, como email, picture, etc.
+  };
+}
+
+
+const Navbar = ({ session }: { session: Session | null }) => { // Recibe 'session' como una prop
   return (
     <nav className="w-full px-6 py-4 flex items-center justify-between bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
       <Link
@@ -55,6 +65,19 @@ const Navbar = async () => {
             </Link>
           </>
         )}
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Pagar</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Proceso de pago</DialogTitle>
+            {/* Aquí va el contenido de tu componente de pago */}
+            <div className="p-4">
+              <PaymentComponent />
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </nav>
   );
