@@ -66,18 +66,21 @@ const Navbar = ({ session }: { session: Session | null }) => { // Recibe 'sessio
           </>
         )}
 
+
+        {/* Botón y componente de pago usando el Dialog de Shadcn UI */}
         <Dialog>
+          {/* El DialogTrigger envuelve el botón que abrirá el modal */}
           <DialogTrigger asChild>
             <Button variant="outline">Pagar</Button>
           </DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Proceso de pago</DialogTitle>
-            {/* Aquí va el contenido de tu componente de pago */}
-            <div className="p-4">
-              <PaymentComponent />
-            </div>
+          {/* El DialogContent es el contenedor para el componente de pago */}
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogTitle>Formulario de Pago</DialogTitle>
+            {/* Aquí se renderiza tu componente de pago */}
+            <PaymentComponent />
           </DialogContent>
         </Dialog>
+
       </div>
     </nav>
   );

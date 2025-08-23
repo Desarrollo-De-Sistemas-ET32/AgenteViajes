@@ -1,102 +1,108 @@
-// components/MP_Payment.js
+'use client';
+
+import { useEffect, useRef } from 'react';
+
+// Declaramos la interfaz de la ventana para incluir MercadoPago, evitando errores de TypeScript
+declare global {
+  interface Window {
+    MercadoPago: any;
+  }
+}
 
 const MP_Payment = () => {
-    const htmlCode = `
-        <html>
-            <head>
-                <script src="https://sdk.mercadopago.com/js/v2">
-                </script>
-            </head>
-            <body>
-                <div id="paymentBrick_container">
-                </div>
-                <script>
-                const mp = new MercadoPago('YOUR_PUBLIC_KEY', {
-                locale: 'es-AR'
-            });
+  const containerRef = useRef<HTMLDivElement>(null);
 
-            const bricksBuilder = mp.bricks();
-            const renderPaymentBrick = async (bricksBuilder) => {
-              const settings = {
-                initialization: {
-                  /*
-                  "amount" es el monto total a pagar por todos los medios de pago con excepción de la Cuenta de Mercado Pago y Cuotas sin tarjeta de crédito, las cuales tienen su valor de procesamiento determinado en el backend a través del "preferenceId"
-                  }
-                  */
-                  amount: 10000,
-                  preferenceId: "<PREFERENCE_ID>",
-                  payer: {
-                    firstName: "",
-                    lastName: "",
-                    email: "",
-                  },
+  useEffect(() => {
+    const loadMercadoPago = async () => {
+      const script = document.createElement('script');
+      script.src = 'https://sdk.mercadopago.com/js/v2';
+      script.async = true;
+
+      script.onload = async () => {
+        try {
+          if (!window.MercadoPago) {
+            console.error("MercadoPago SDK could not be loaded.");
+            return;
+          }
+
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const mp = new window.MercadoPago('YOUR_PUBLIC_KEY', {
+            locale: 'es-AR'
+          });
+
+          const bricksBuilder = mp.bricks();
+
+          const settings = {
+            initialization: {
+              amount: 10000,
+              preferenceId: '<PREFERENCE_ID>',
+            },
+            customization: {
+              visual: {
+                style: {
+                  theme: "dark",
                 },
-                customization: {
-                  visual: {
-                    style: {
-                      theme: "dark",
-                   },
-                  },
-                  paymentMethods: {
-                    creditCard: "all",
-										debitCard: "all",
-										ticket: "all",
-										bankTransfer: "all",
-										onboarding_credits: "all",
-										wallet_purchase: "all",
-										: "all",
-                    maxInstallments: 3
-                  },
-                },
-                callbacks: {
-                  onReady: () => {
-                    /*
-                     Callback llamado cuando el Brick está listo.
-                     Aquí puede ocultar cargamentos de su sitio, por ejemplo.
-                    */
-                  },
-                  onSubmit: ({ selectedPaymentMethod, formData }) => {
-                    // callback llamado al hacer clic en el botón de envío de datos
-                    return new Promise((resolve, reject) => {
-                      fetch("/process_payment", {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(formData),
-                      })
-                        .then((response) => response.json())
-                        .then((response) => {
-                          // recibir el resultado del pago
-                          resolve();
-                        })
-                        .catch((error) => {
-                          // manejar la respuesta de error al intentar crear el pago
-                          reject();
-                        });
+              },
+            },
+            callbacks: {
+              onReady: () => {
+                console.log('Payment Brick is ready');
+              },
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              onSubmit: ({ selectedPaymentMethod, formData }) => {
+                return new Promise<void>((resolve, reject) => {
+                  fetch("/process_payment", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                  })
+                    .then((response) => response.json())
+                    .then(() => {
+                      resolve();
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                      reject();
                     });
-                  },
-                  onError: (error) => {
-                    // callback llamado para todos los casos de error de Brick
-                    console.error(error);
-                  },
-                },
-              };
-              window.paymentBrickController = await bricksBuilder.create(
-                "payment",
-                "paymentBrick_container",
-                settings
-              );
-            };
-            renderPaymentBrick(bricksBuilder);
-          </script>
-        </body>
-        </html>
-  `;
+                });
+              },
+              onError: (error: any) => {
+                console.error(error);
+              },
+            },
+          };
+          
+          if (containerRef.current) {
+            await bricksBuilder.create(
+              "payment",
+              containerRef.current.id,
+              settings
+            );
+          }
+        } catch (error) {
+          console.error("Error al cargar el SDK de Mercado Pago:", error);
+        }
+      };
 
-    return (
-        <div dangerouslySetInnerHTML={{ __html: htmlCode }} />
-    );
+      document.body.appendChild(script);
+
+      return () => {
+        document.body.removeChild(script);
+      };
+    };
+
+    loadMercadoPago();
+  }, []);
+
+  return (
+    <div id="paymentBrick_container" ref={containerRef}>
+      {/* El brick se montará aquí */}
+    </div>
+  );
 };
 
 export default MP_Payment;
