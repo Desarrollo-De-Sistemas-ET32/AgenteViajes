@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Websocket
 from pydantic import BaseModel
 from together import Together
 import requests 
@@ -69,7 +69,7 @@ app = FastAPI()
 def read_root():
     return {"message": "Servidor de IA de itinerarios en funcionamiento"}
 
-@app.post("/chat")
+@app.we("/chat")
 async def chat_ai(req: ChatRequest):
     user_input = req.message
     model = "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo"
