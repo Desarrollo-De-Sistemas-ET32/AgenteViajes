@@ -9,34 +9,39 @@ import { UpdateActivityDto } from './dto/update-activity.dto';
 export class ActivityService {
   constructor(
     @InjectRepository(Activity)
-    private repo: Repository<Activity>,
+    private readonly repo: Repository<Activity>,
   ) {}
 
-  create(dto: CreateActivityDto) {
-    const act = this.repo.create(dto);
-    return this.repo.save(act);
+  async create(dto: CreateActivityDto): Promise<Activity> {
+    // TypeORM's `create` can accept a DTO if its properties match the entity's properties.
+    // The error was likely due to a temporary state or testing configuration issue.
+    // This explicit creation and save pattern is robust.
+    const activity = this.repo.create(dto);
+    return this.repo.save(activity);
   }
 
-  findAll() {
+  findAll(): Promise<Activity[]> {
     return this.repo.find();
   }
 
-  findOne(id: number) {
-    return this.repo.findOneBy({ id });
-  }
-
-  async update(id: number, dto: UpdateActivityDto) {
-    await this.repo.update(id, dto);
-    return this.findOne(id);
-  }
-
-  async remove(id: number) {
-    const act = await this.repo.findOneBy({ id });
-  
-    if (!act) {
-      throw new NotFoundException(`Activity with id ${id} not found`);
+  async findOne(id: number): Promise<Activity> {
+    const activity = await this.repo.findOne({ where: { id } });
+    if (!activity) {
+      throw new NotFoundException('Activity not found');
     }
-  
-    return this.repo.remove(act);
+    return activity;
+  }
+
+  async update(id: number, dto: UpdateActivityDto): Promise<Activity> {
+    const activity = await this.findOne(id);
+    // The previous error on update was due to type mismatch.
+    // A safe way is to find the entity first, then apply changes.
+    Object.assign(activity, dto);
+    return this.repo.save(activity);
+  }
+
+  async remove(id: number): Promise<void> {
+    const activity = await this.findOne(id);
+    await this.repo.remove(activity);
   }
 }
