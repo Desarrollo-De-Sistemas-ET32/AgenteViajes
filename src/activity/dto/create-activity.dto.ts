@@ -1,12 +1,23 @@
-import { IsString, IsNumber } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsNotEmpty, IsDecimal } from 'class-validator';
 
 export class CreateActivityDto {
   @IsString()
-  name: string;
+  @IsNotEmpty()
+  activityName: string;
 
   @IsString()
+  @IsNotEmpty()
   location: string;
 
   @IsNumber()
-  price: number;
+  @IsNotEmpty()
+  cost: number;
+
+  @IsString()
+  @IsOptional()
+  duration?: string;
+
+  @IsString()
+  @IsOptional()
+  mediaPath?: string;
 }

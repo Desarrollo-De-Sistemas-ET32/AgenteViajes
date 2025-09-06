@@ -4,7 +4,6 @@ import {
   Column,
   OneToMany,
   ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { Flights } from './flights.entity';
 import { Travel } from './travel.entity';
@@ -14,6 +13,15 @@ import { Payments } from './payments.entity';
 export class User {
   @PrimaryGeneratedColumn({ name: 'ID_User' })
   id: number;
+
+  @Column({ unique: true })
+  username: string;
+
+  @Column()
+  password: string;
+
+  @Column({ type: 'json', nullable: true })
+  roles: string[];
 
   @Column({ name: 'Name', length: 45 })
   name: string;
@@ -44,5 +52,5 @@ export class User {
 
   // N:M con Payments por tabla puente `User_has_Payments`
   @ManyToMany(() => Payments, (payment) => payment.users)
-payments: Payments[];
+  payments: Payments[];
 }

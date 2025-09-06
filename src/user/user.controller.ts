@@ -1,13 +1,20 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { ThrottlerGuard } from '@nestjs/throttler';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 @Controller('users')
+@UseGuards(AuthGuard('jwt'), RolesGuard, ThrottlerGuard)
+@UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 export class UserController {
   constructor(private readonly service: UserService) {}
 
   @Post()
+  @Roles('admin')
   create(@Body() dto: CreateUserDto) {
     return this.service.create(dto);
   }
@@ -23,11 +30,13 @@ export class UserController {
   }
 
   @Patch(':id')
+  @Roles('admin')
   update(@Param('id') id: string, @Body() dto: UpdateUserDto) {
     return this.service.update(+id, dto);
   }
 
   @Delete(':id')
+  @Roles('admin')
   remove(@Param('id') id: string) {
     return this.service.remove(+id);
   }
