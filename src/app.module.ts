@@ -10,6 +10,9 @@ import { TravelModule } from './travel/travel.module';
 import { ActivityModule } from './activity/activity.module';
 import { PaymentModule } from './payment/payment.module'; // Debe ser PaymentModule
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   imports: [
@@ -30,8 +33,15 @@ import { UserModule } from './user/user.module';
     ActivityModule,
     PaymentModule, // Debe ser PaymentModule
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

@@ -1,6 +1,17 @@
-import { IsString, IsEmail, IsOptional, IsInt } from 'class-validator';
+import { IsString, IsEmail, IsOptional, IsArray, IsIn } from 'class-validator';
 
 export class CreateUserDto {
+  @IsString()
+  username: string;
+
+  @IsString()
+  password: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsIn(['user', 'admin'], { each: true })
+  roles: string[];
+
   @IsString()
   name: string;
 
@@ -11,12 +22,11 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
-  phoneNumber: string; // en la tabla lo pusiste como VARCHAR(20), ojo que tu entity lo tiene como int 👀
+  phoneNumber: string;
 
   @IsString()
   address: string;
 
   @IsOptional()
-  @IsInt()
   membership?: number;
 }
