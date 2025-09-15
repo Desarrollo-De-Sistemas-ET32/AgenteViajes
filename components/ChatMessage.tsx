@@ -2,6 +2,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Bot, User } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { MarkdownComponents } from "./MarkdownComponents";
 
 interface ChatMessageProps {
   message: string;
@@ -29,7 +32,14 @@ export const ChatMessage = ({ message, isUser, timestamp }: ChatMessageProps) =>
           ? "bg-gradient-button text-white rounded-br-md shadow-card" 
           : "bg-card border border-border rounded-bl-md hover:shadow-md"
       )}>
-        <p className="text-sm md:text-base leading-relaxed">{message}</p>
+        <div className="text-sm md:text-base leading-relaxed">
+          <ReactMarkdown 
+            remarkPlugins={[remarkGfm]}
+            components={MarkdownComponents}
+          >
+            {message}
+          </ReactMarkdown>
+        </div>
         {timestamp && (
           <div className="flex items-center justify-between mt-2">
             <Badge variant="secondary" className={cn(
