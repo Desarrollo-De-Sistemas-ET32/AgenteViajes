@@ -53,7 +53,7 @@ def buscar_hoteles(lat: float, lon: float, limite: int = 5):
 
 
 # Configurar Together AI
-client = Together(api_key=os.environ.get("TOGETHER_API_KEY"))
+client = Together(api_key=os.environ.get("8142b8caedfed73ef1ddce6a35ac70d4ab6a92b1b84d8503f7040721c28a84ef"))
 
 system_prompt = """
 Eres un agente de viajes experto. Tu tarea es crear itinerarios de viaje detallados de interés cultural y elegancia basados en las preferencias del usuario.
