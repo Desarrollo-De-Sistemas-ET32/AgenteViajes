@@ -9,11 +9,11 @@ const IntroSection = () => {
   const router = useRouter();
   return (
     <div className="px-6 mb-16">
-      <Card className="w-full p-12 bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <Card className="w-full p-12 bg-card text-card-foreground border border-border shadow-lg hover:shadow-xl transition-shadow duration-300">
         <div className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-purple-100 rounded-full">
-              <MessageCircle className="h-8 w-8 text-purple-600" />
+            <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full">
+              <MessageCircle className="h-8 w-8 text-purple-600 dark:text-purple-400" />
             </div>
           </div>
           <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">

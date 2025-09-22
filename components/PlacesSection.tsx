@@ -13,7 +13,7 @@ const PlacesSection = () => {
     {
       id: 1,
       name: "París, Francia",
-      description: "La ciudad del amor con la Torre Eiffel y museos increíbles",
+      description: "La ciudad del amor con la Torre Eiffel, el Arco del Triunfo y museos increíbles",
       duration: "3-5 días",
       rating: 4.9,
       image: "photo-1466442929976-97f336a657be"
@@ -37,7 +37,7 @@ const PlacesSection = () => {
     {
       id: 4,
       name: "Bali, Indonesia",
-      description: "Paraíso tropical con templos sagrados y playas hermosas",
+      description: "Paraíso tropical con templos sagrados, clima asombroso y playas hermosas",
       duration: "5-7 días",
       rating: 4.6,
       image: "photo-1461749280684-dccba630e2f6"
@@ -45,7 +45,7 @@ const PlacesSection = () => {
     {
       id: 5,
       name: "Islandia",
-      description: "Paisajes únicos con auroras boreales y géiseres naturales",
+      description: "Paisajes únicos con auroras boreales, glaciares y géiseres naturales",
       duration: "6-8 días",
       rating: 4.8,
       image: "photo-1517022812141-23620dba5c23"

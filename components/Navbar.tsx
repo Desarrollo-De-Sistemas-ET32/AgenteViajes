@@ -31,7 +31,7 @@ const Navbar = ({ session }: { session: Session | null }) => {
   };
 
   return (
-    <nav className="w-full px-6 py-4 flex items-center justify-between bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50 dark:bg-black/80 dark:border-gray-900 transition-colors duration-300">
+    <nav className="w-full px-6 py-4 flex items-center justify-between bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50 dark:bg-black/80 dark:border-gray-900">
       <Link
         href="/"
         className="font-bold text-xl text-foreground hover:text-purple-600 transition-colors cursor-pointer"
