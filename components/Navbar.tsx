@@ -1,24 +1,37 @@
-// components/Navbar.tsx
 'use client';
-import { Search, Menu } from "lucide-react";
+import { Search, Menu, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PaymentComponent from '@/components/MP_Payment';
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from '@/components/ui/dialog';
-
 
 interface Session {
   user: {
     name?: string;
-    // Agrega más propiedades del usuario si las usas, como email, picture, etc.
   };
 }
 
+const Navbar = ({ session }: { session: Session | null }) => {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
-const Navbar = ({ session }: { session: Session | null }) => { // Recibe 'session' como una prop
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+    setTheme(initialTheme);
+    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    localStorage.setItem('theme', newTheme);
+  };
+
   return (
-    <nav className="w-full px-6 py-4 flex items-center justify-between bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
+    <nav className="w-full px-6 py-4 flex items-center justify-between bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50 dark:bg-black/80 dark:border-gray-900">
       <Link
         href="/"
         className="font-bold text-xl text-foreground hover:text-purple-600 transition-colors cursor-pointer"
@@ -27,6 +40,20 @@ const Navbar = ({ session }: { session: Session | null }) => { // Recibe 'sessio
       </Link>
 
       <div className="flex items-center gap-3">
+        {/* Botón para cambiar el tema */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          onClick={toggleTheme}
+        >
+          {theme === 'dark' ? (
+            <Sun className="h-5 w-5" />
+          ) : (
+            <Moon className="h-5 w-5" />
+          )}
+        </Button>
+
         <Button
           variant="ghost"
           size="icon"
@@ -66,7 +93,6 @@ const Navbar = ({ session }: { session: Session | null }) => { // Recibe 'sessio
           </>
         )}
 
-
         {/* Botón y componente de pago usando el Dialog de Shadcn UI */}
         <Dialog>
           {/* El DialogTrigger envuelve el botón que abrirá el modal */}
@@ -80,7 +106,6 @@ const Navbar = ({ session }: { session: Session | null }) => { // Recibe 'sessio
             <PaymentComponent />
           </DialogContent>
         </Dialog>
-
       </div>
     </nav>
   );
