@@ -1,8 +1,9 @@
 'use client'
 import { ChatInterface, ChatInterfaceProps } from "@/components/ChatInterface"
 import { Router, useRouter } from "next/router";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
 
-export default function Chat(){
+export default withAuthenticationRequired(function Chat(){
     
     const handleBack = () => {
     const router = useRouter()
@@ -15,6 +16,4 @@ export default function Chat(){
     </div>
 )
     
-    
-
-}
+});
