@@ -1,13 +1,15 @@
-// app/api/auth/token/route.ts
-import { getAccessToken } from '@auth0/nextjs-auth0';
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+// Ejemplo de uso en un componente del lado del cliente
+async function callApi() {
+  // 1. Llama a tu endpoint para obtener el token
+  const response = await fetch('/api/auth/token');
+  const data = await response.json();
+  const accessToken = data.accessToken;
 
-export async function GET(req: NextRequest) {
-  try {
-    const { accessToken } = await getAccessToken();
-    return NextResponse.json({ accessToken });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: err.status || 500 });
-  }
+  // 2. Usa el token para llamar a tu back-end
+  const apiResponse = await fetch('https://tu-backend-api.com/recurso-protegido', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  // ...
 }
