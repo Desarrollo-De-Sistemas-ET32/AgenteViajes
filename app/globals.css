@@ -41,6 +41,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --gradient-primary: linear-gradient(135deg, #e91e63, #9c27b0);
 }
 
 :root {
