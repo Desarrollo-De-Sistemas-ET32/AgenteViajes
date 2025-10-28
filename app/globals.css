@@ -41,7 +41,6 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --gradient-primary: linear-gradient(135deg, #e91e63, #9c27b0);
 }
 
 :root {
@@ -77,6 +76,14 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --pink-light: 340 100% 85%;
+  --purple-light: 291 100% 85%;
+  --gradient-primary: linear-gradient(135deg, #e91e63, #9c27b0);
+  --gradient-card: linear-gradient(135deg, #f48fb1, #ce93d8);
+  --gradient-accent: linear-gradient(45deg, #e91e63, #9c27b0);
+    
+    --pink-primary: 340 82% 52%;
+    --purple-primary: 291 64% 42%;
 }
 
 .dark {
