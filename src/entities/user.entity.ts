@@ -2,55 +2,80 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  CreateDateColumn,
+  UpdateDateColumn,
   OneToMany,
-  ManyToMany,
 } from 'typeorm';
-import { Flights } from './flights.entity';
+import { TravelCompanion } from './travel-companion.entity';
+import { Notification } from './notification.entity';
+import { Chat } from './chat.entity';
+import { Favorite } from './favorite.entity';
+import { UserTravelInterest } from './user-travel-interests.entity';
+import { DietaryRestriction } from './dietary-restrictions.entity';
+import { AccessibilityRequirement } from './accessibility-requirements.entity';
+import { UserSetting } from './user-settings.entity';
 import { Travel } from './travel.entity';
-import { Payments } from './payments.entity';
+import { Flight } from './flights.entity';
 
 @Entity('User')
 export class User {
   @PrimaryGeneratedColumn({ name: 'ID_User' })
   id: number;
 
-  @Column({ unique: true })
-  username: string;
-
-  @Column()
-  password: string;
-
-  @Column({ type: 'json', nullable: true })
-  roles: string[];
-
-  @Column({ name: 'Name', length: 45 })
+  @Column({ type: 'varchar', length: 45, name: 'Name' })
   name: string;
 
-  @Column({ name: 'Surname', length: 45 })
+  @Column({ type: 'varchar', length: 45, name: 'Surname' })
   surname: string;
 
-  @Column({ name: 'Email', length: 60 })
+  @Column({ type: 'varchar', length: 60, unique: true, name: 'Email' })
   email: string;
 
-  // Tu SQL dice VARCHAR(20)
-  @Column({ name: 'Phone_number', length: 20 })
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'Password', select: false })
+  password: string;
+
+  @Column({ type: 'varchar', length: 20, name: 'Phone_number' })
   phoneNumber: string;
 
-  @Column({ name: 'Address', length: 45 })
+  @Column({ type: 'varchar', length: 45, name: 'Address' })
   address: string;
 
-  @Column({ name: 'MemberShip', type: 'tinyint', nullable: true })
-  membership: number | null;
+  @Column({ type: 'tinyint', default: 0, nullable: true, name: 'MemberShip' })
+  membership: number;
 
-  // 1:N con Flights (Flights tiene ID_User)
-  @OneToMany(() => Flights, (flight) => flight.user)
-  flights: Flights[];
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'Profile_Image_Path' })
+  profileImagePath: string;
 
-  // 1:N con Travel (Travel tiene ID_User)
+  @CreateDateColumn({ name: 'Created_At' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'Updated_At' })
+  updatedAt: Date;
+
   @OneToMany(() => Travel, (travel) => travel.user)
   travels: Travel[];
 
-  // N:M con Payments por tabla puente `User_has_Payments`
-  @ManyToMany(() => Payments, (payment) => payment.users)
-  payments: Payments[];
+  @OneToMany(() => Flight, (flight) => flight.user)
+  flights: Flight[];
+
+  @OneToMany(() => Chat, (chat) => chat.user)
+  chats: Chat[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
+
+  @OneToMany(() => Favorite, (favorite) => favorite.user)
+  favorites: Favorite[];
+
+  @OneToMany(() => UserTravelInterest, (interest) => interest.user)
+  travelInterests: UserTravelInterest[];
+
+  @OneToMany(() => DietaryRestriction, (restriction) => restriction.user)
+  dietaryRestrictions: DietaryRestriction[];
+
+  @OneToMany(() => AccessibilityRequirement, (requirements) => requirements.user)
+  accessibilityRequirements: AccessibilityRequirement[];
+
+  @OneToMany(() => UserSetting, (setting) => setting.user)
+  settings: UserSetting[];
 }

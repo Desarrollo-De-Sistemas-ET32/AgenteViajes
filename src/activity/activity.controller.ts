@@ -1,43 +1,123 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  ParseIntPipe,
+  Query,
+  ParseFloatPipe,
+} from '@nestjs/common';
 import { ActivityService } from './activity.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
-import { AuthGuard } from '@nestjs/passport';
-import { ThrottlerGuard } from '@nestjs/throttler';
-import { Roles } from '../auth/roles.decorator';
-import { RolesGuard } from '../auth/roles.guard';
+import { ActivityCategory } from '../entities/activity.entity';
 
 @Controller('activity')
-@UseGuards(AuthGuard('jwt'), RolesGuard, ThrottlerGuard)
-@UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 export class ActivityController {
-  constructor(private readonly service: ActivityService) {}
+  constructor(private readonly activityService: ActivityService) {}
 
   @Post()
-  @Roles('admin')
-  create(@Body() dto: CreateActivityDto) {
-    return this.service.create(dto);
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() createActivityDto: CreateActivityDto) {
+    return this.activityService.create(createActivityDto);
   }
 
   @Get()
   findAll() {
-    return this.service.findAll();
+    return this.activityService.findAll();
+  }
+
+  @Get('category/:category')
+  findByCategory(@Param('category') category: ActivityCategory) {
+    return this.activityService.findByCategory(category);
+  }
+
+  @Get('category/:category/count')
+  async countByCategory(@Param('category') category: ActivityCategory) {
+    const count = await this.activityService.countByCategory(category);
+    return { count };
+  }
+
+  @Get('location/:location')
+  findByLocation(@Param('location') location: string) {
+    return this.activityService.findByLocation(location);
+  }
+
+  @Get('location/:location/count')
+  async countByLocation(@Param('location') location: string) {
+    const count = await this.activityService.countByLocation(location);
+    return { count };
+  }
+
+  @Get('cost-range')
+  findByCostRange(
+    @Query('min', ParseFloatPipe) minCost: number,
+    @Query('max', ParseFloatPipe) maxCost: number,
+  ) {
+    return this.activityService.findByCostRange(minCost, maxCost);
+  }
+
+  @Get('max-cost/:maxCost')
+  findByMaxCost(@Param('maxCost', ParseFloatPipe) maxCost: number) {
+    return this.activityService.findByMaxCost(maxCost);
+  }
+
+  @Get('min-rating/:minRating')
+  findByMinRating(@Param('minRating', ParseFloatPipe) minRating: number) {
+    return this.activityService.findByMinRating(minRating);
+  }
+
+  @Get('top-rated')
+  findTopRated(@Query('limit', ParseIntPipe) limit: number = 10) {
+    return this.activityService.findTopRated(limit);
+  }
+
+  @Get('search')
+  searchByName(@Query('name') name: string) {
+    return this.activityService.searchByName(name);
+  }
+
+  @Get('statistics/average-cost')
+  async getAverageCost() {
+    const average = await this.activityService.getAverageCost();
+    return { average };
+  }
+
+  @Get('statistics/average-rating')
+  async getAverageRating() {
+    const average = await this.activityService.getAverageRating();
+    return { average };
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.service.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.activityService.findOne(id);
   }
 
   @Patch(':id')
-  @Roles('admin')
-  update(@Param('id') id: string, @Body() dto: UpdateActivityDto) {
-    return this.service.update(+id, dto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateActivityDto: UpdateActivityDto,
+  ) {
+    return this.activityService.update(id, updateActivityDto);
+  }
+
+  @Patch(':id/rating')
+  updateRating(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: { rating: number },
+  ) {
+    return this.activityService.updateRating(id, body.rating);
   }
 
   @Delete(':id')
-  @Roles('admin')
-  remove(@Param('id') id: string) {
-    return this.service.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.activityService.remove(id);
   }
 }

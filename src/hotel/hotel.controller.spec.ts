@@ -1,35 +1,118 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { HotelController } from './hotel.controller';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  HttpCode,
+  HttpStatus,
+  Query,
+  ParseFloatPipe,
+} from '@nestjs/common';
 import { HotelService } from './hotel.service';
-import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from '../auth/roles.guard';
-import { ThrottlerGuard } from '@nestjs/throttler';
+import { CreateHotelDto } from './dto/create-hotel.dto';
+import { UpdateHotelDto } from './dto/update-hotel.dto';
 
-describe('HotelController', () => {
-  let controller: HotelController;
+@Controller('hotels')
+export class HotelController {
+  constructor(private readonly hotelService: HotelService) {}
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [HotelController],
-      providers: [
-        {
-          provide: HotelService,
-          useValue: {},
-        },
-      ],
-    })
-      .overrideGuard(AuthGuard('jwt'))
-      .useValue({ canActivate: () => true })
-      .overrideGuard(RolesGuard)
-      .useValue({ canActivate: () => true })
-      .overrideGuard(ThrottlerGuard)
-      .useValue({ canActivate: () => true })
-      .compile();
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() createHotelDto: CreateHotelDto) {
+    return this.hotelService.create(createHotelDto);
+  }
 
-    controller = module.get<HotelController>(HotelController);
-  });
+  @Get()
+  findAll() {
+    return this.hotelService.findAll();
+  }
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-});
+  @Get('top-rated')
+  findTopRated(@Query('limit') limit?: number) {
+    return this.hotelService.findTopRated(limit || 10);
+  }
+
+  @Get('search')
+  searchByName(@Query('term') searchTerm: string) {
+    return this.hotelService.searchByName(searchTerm);
+  }
+
+  @Get('location/:location')
+  findByLocation(@Param('location') location: string) {
+    return this.hotelService.findByLocation(location);
+  }
+
+  @Get('location/:location/count')
+  countByLocation(@Param('location') location: string) {
+    return this.hotelService.countByLocation(location);
+  }
+
+  @Get('location/:location/average-rating')
+  getAverageRatingByLocation(@Param('location') location: string) {
+    return this.hotelService.getAverageRatingByLocation(location);
+  }
+
+  @Get('stars/:stars')
+  findByStars(@Param('stars', ParseIntPipe) stars: number) {
+    return this.hotelService.findByStars(stars);
+  }
+
+  @Get('stars/:stars/count')
+  countByStars(@Param('stars', ParseIntPipe) stars: number) {
+    return this.hotelService.countByStars(stars);
+  }
+
+  @Get('stars/:stars/location/:location')
+  findByStarsAndLocation(
+    @Param('stars', ParseIntPipe) stars: number,
+    @Param('location') location: string,
+  ) {
+    return this.hotelService.findByStarsAndLocation(stars, location);
+  }
+
+  @Get('min-rating/:minRating')
+  findByMinRating(@Param('minRating', ParseFloatPipe) minRating: number) {
+    return this.hotelService.findByMinRating(minRating);
+  }
+
+  @Get('average-rating')
+  getAverageRating() {
+    return this.hotelService.getAverageRating();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.hotelService.findOne(id);
+  }
+
+  @Get(':id/travels')
+  findWithTravels(@Param('id', ParseIntPipe) id: number) {
+    return this.hotelService.findWithTravels(id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateHotelDto: UpdateHotelDto,
+  ) {
+    return this.hotelService.update(id, updateHotelDto);
+  }
+
+  @Patch(':id/rating')
+  updateRating(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('rating', ParseFloatPipe) rating: number,
+  ) {
+    return this.hotelService.updateRating(id, rating);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.hotelService.remove(id);
+  }
+}

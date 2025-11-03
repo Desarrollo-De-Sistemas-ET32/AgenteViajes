@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Activity } from '../entities/activity.entity';
+import { Repository, Between, MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
+import { Activity, ActivityCategory } from '../entities/activity.entity';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
 
@@ -9,39 +9,133 @@ import { UpdateActivityDto } from './dto/update-activity.dto';
 export class ActivityService {
   constructor(
     @InjectRepository(Activity)
-    private readonly repo: Repository<Activity>,
+    private readonly activityRepository: Repository<Activity>,
   ) {}
 
-  async create(dto: CreateActivityDto): Promise<Activity> {
-    // TypeORM's `create` can accept a DTO if its properties match the entity's properties.
-    // The error was likely due to a temporary state or testing configuration issue.
-    // This explicit creation and save pattern is robust.
-    const activity = this.repo.create(dto);
-    return this.repo.save(activity);
+  async create(createActivityDto: CreateActivityDto): Promise<Activity> {
+    const activity = this.activityRepository.create(createActivityDto);
+    return await this.activityRepository.save(activity);
   }
 
-  findAll(): Promise<Activity[]> {
-    return this.repo.find();
+  async findAll(): Promise<Activity[]> {
+    return await this.activityRepository.find({
+      order: { activityName: 'ASC' },
+    });
   }
 
   async findOne(id: number): Promise<Activity> {
-    const activity = await this.repo.findOne({ where: { id } });
+    const activity = await this.activityRepository.findOne({
+      where: { idActivity: id },
+    });
+
     if (!activity) {
-      throw new NotFoundException('Activity not found');
+      throw new NotFoundException(`Activity with ID ${id} not found`);
     }
+
     return activity;
   }
 
-  async update(id: number, dto: UpdateActivityDto): Promise<Activity> {
+  async findByCategory(category: ActivityCategory): Promise<Activity[]> {
+    return await this.activityRepository.find({
+      where: { category },
+      order: { activityName: 'ASC' },
+    });
+  }
+
+  async findByLocation(location: string): Promise<Activity[]> {
+    return await this.activityRepository.find({
+      where: { location },
+      order: { activityName: 'ASC' },
+    });
+  }
+
+  async findByCostRange(minCost: number, maxCost: number): Promise<Activity[]> {
+    return await this.activityRepository.find({
+      where: {
+        cost: Between(minCost, maxCost),
+      },
+      order: { cost: 'ASC' },
+    });
+  }
+
+  async findByMaxCost(maxCost: number): Promise<Activity[]> {
+    return await this.activityRepository.find({
+      where: {
+        cost: LessThanOrEqual(maxCost),
+      },
+      order: { cost: 'ASC' },
+    });
+  }
+
+  async findByMinRating(minRating: number): Promise<Activity[]> {
+    return await this.activityRepository.find({
+      where: {
+        rating: MoreThanOrEqual(minRating),
+      },
+      order: { rating: 'DESC' },
+    });
+  }
+
+  async findTopRated(limit: number = 10): Promise<Activity[]> {
+    return await this.activityRepository.find({
+      order: { rating: 'DESC' },
+      take: limit,
+    });
+  }
+
+  async searchByName(name: string): Promise<Activity[]> {
+    return await this.activityRepository
+      .createQueryBuilder('activity')
+      .where('activity.activityName LIKE :name', { name: `%${name}%` })
+      .orderBy('activity.activityName', 'ASC')
+      .getMany();
+  }
+
+  async update(id: number, updateActivityDto: UpdateActivityDto): Promise<Activity> {
     const activity = await this.findOne(id);
-    // The previous error on update was due to type mismatch.
-    // A safe way is to find the entity first, then apply changes.
-    Object.assign(activity, dto);
-    return this.repo.save(activity);
+
+    Object.assign(activity, updateActivityDto);
+    return await this.activityRepository.save(activity);
+  }
+
+  async updateRating(id: number, rating: number): Promise<Activity> {
+    const activity = await this.findOne(id);
+    activity.rating = rating;
+    return await this.activityRepository.save(activity);
   }
 
   async remove(id: number): Promise<void> {
     const activity = await this.findOne(id);
-    await this.repo.remove(activity);
+    await this.activityRepository.remove(activity);
+  }
+
+  async countByCategory(category: ActivityCategory): Promise<number> {
+    return await this.activityRepository.count({
+      where: { category },
+    });
+  }
+
+  async countByLocation(location: string): Promise<number> {
+    return await this.activityRepository.count({
+      where: { location },
+    });
+  }
+
+  async getAverageCost(): Promise<number> {
+    const result = await this.activityRepository
+      .createQueryBuilder('activity')
+      .select('AVG(activity.cost)', 'average')
+      .getRawOne();
+
+    return result?.average || 0;
+  }
+
+  async getAverageRating(): Promise<number> {
+    const result = await this.activityRepository
+      .createQueryBuilder('activity')
+      .select('AVG(activity.rating)', 'average')
+      .getRawOne();
+
+    return result?.average || 0;
   }
 }

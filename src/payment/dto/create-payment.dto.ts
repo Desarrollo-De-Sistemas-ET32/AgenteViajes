@@ -1,25 +1,39 @@
-import { IsOptional, IsString, IsDateString, IsEnum, IsArray, IsNumber } from 'class-validator';
-import { PaymentStatus } from '../../entities/payments.entity';
+import { IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength, IsNumber, IsDateString, IsInt, IsPositive } from 'class-validator';
+import { PaymentStatus, PaymentMethod, PaymentEntityType } from '../../entities/payments.entity';
 
-export class CreatePaymentDto {
-  @IsOptional()
+export class CreatePaymentDto {  // ← CORREGIDO: CreatePaymentDto (singular)
   @IsEnum(PaymentStatus)
+  @IsOptional()
   status?: PaymentStatus;
 
-  @IsOptional()
   @IsDateString()
+  @IsOptional()
   paymentDate?: Date;
 
+  @IsEnum(PaymentMethod)
   @IsOptional()
-  @IsString()
-  paymentMethod?: string;
+  paymentMethod?: PaymentMethod;
 
-  @IsOptional()
   @IsString()
+  @MaxLength(100)
+  @IsOptional()
   transactionCode?: string;
 
+  @IsNumber()
+  @IsNotEmpty()
+  amount: number;
+
+  @IsString()
+  @MaxLength(3)
   @IsOptional()
-  @IsArray()
-  @IsNumber({}, { each: true })
-  userIds?: number[];
+  currency?: string;
+
+  @IsEnum(PaymentEntityType)
+  @IsNotEmpty()
+  entityType: PaymentEntityType;
+
+  @IsInt()
+  @IsPositive()
+  @IsNotEmpty()
+  entityId: number;
 }

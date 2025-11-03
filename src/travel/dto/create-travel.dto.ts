@@ -1,19 +1,56 @@
-import { IsOptional, IsNumber, IsDate } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsInt,
+  IsEnum,
+  IsDateString,
+  IsDecimal,
+  MaxLength,
+} from 'class-validator';
+import { TravelStatus, TravelStyle, AccommodationType } from '../../entities/travel.entity';
 
 export class CreateTravelDto {
+  @IsInt()
   @IsOptional()
-  @IsNumber()
   userId?: number;
 
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  travelName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  destination: string;
+
+  @IsDateString()
   @IsOptional()
-  @IsDate()
   startDate?: Date;
 
+  @IsDateString()
   @IsOptional()
-  @IsDate()
-  endTime?: Date;
+  endDate?: Date;
 
+  @IsDecimal()
   @IsOptional()
-  @IsNumber()
   totalCost?: number;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(255)
+  documentPath?: string;
+
+  @IsEnum(TravelStatus)
+  @IsOptional()
+  status?: TravelStatus;
+
+  @IsEnum(TravelStyle)
+  @IsOptional()
+  travelStyle?: TravelStyle;
+
+  @IsEnum(AccommodationType)
+  @IsOptional()
+  accommodationType?: AccommodationType;
 }

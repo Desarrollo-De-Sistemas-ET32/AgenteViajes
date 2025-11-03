@@ -9,7 +9,7 @@ import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 
 @Controller('hotels')
-@UseGuards(AuthGuard('jwt'), RolesGuard, ThrottlerGuard)
+// @UseGuards(AuthGuard('jwt'), RolesGuard, ThrottlerGuard)
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
