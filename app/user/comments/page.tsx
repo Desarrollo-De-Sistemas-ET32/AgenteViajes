@@ -6,8 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, MessageSquare, Star, Calendar, MapPin, Edit } from "lucide-react";
 import Link from "next/link";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
- export default function CommentsPage(){
+ export default withPageAuthRequired(function CommentsPage(){
   const comments = [
     {
       id: 1,
@@ -215,4 +216,4 @@ import Link from "next/link";
       </div>
     </div>
   );
-};
+});

@@ -8,8 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Heart, MapPin, Utensils, Music, Palette, Camera, Mountain } from "lucide-react";
 import Link from "next/link";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
- export default function UserPreferences(){
+ export default withPageAuthRequired(function UserPreferences(){
   const interests = [
     { id: 'art', label: 'Arte', icon: '🎨', selected: true },
     { id: 'music', label: 'Música', icon: '🎵', selected: true },
@@ -252,4 +253,4 @@ import Link from "next/link";
       </div>
     </div>
   );
-};
+});
