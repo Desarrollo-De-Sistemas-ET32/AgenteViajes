@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between, MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
+import { Repository, Like, MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
 import { Activity, ActivityCategory } from '../entities/activity.entity';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
@@ -9,7 +9,7 @@ import { UpdateActivityDto } from './dto/update-activity.dto';
 export class ActivityService {
   constructor(
     @InjectRepository(Activity)
-    private readonly activityRepository: Repository<Activity>,
+    private activityRepository: Repository<Activity>,
   ) {}
 
   async create(createActivityDto: CreateActivityDto): Promise<Activity> {
@@ -19,13 +19,15 @@ export class ActivityService {
 
   async findAll(): Promise<Activity[]> {
     return await this.activityRepository.find({
+      relations: ['city'],
       order: { activityName: 'ASC' },
     });
   }
 
   async findOne(id: number): Promise<Activity> {
     const activity = await this.activityRepository.findOne({
-      where: { idActivity: id },
+      where: { id },
+      relations: ['city'],
     });
 
     if (!activity) {
@@ -35,60 +37,118 @@ export class ActivityService {
     return activity;
   }
 
+  async findWithTravels(id: number): Promise<Activity> {
+    const activity = await this.activityRepository.findOne({
+      where: { id },
+      relations: ['city', 'travels'],
+    });
+
+    if (!activity) {
+      throw new NotFoundException(`Activity with ID ${id} not found`);
+    }
+
+    return activity;
+  }
+
+  async findByCity(cityId: number): Promise<Activity[]> {
+    return await this.activityRepository.find({
+      where: { cityId },
+      relations: ['city'],
+      order: { rating: 'DESC' },
+    });
+  }
+
   async findByCategory(category: ActivityCategory): Promise<Activity[]> {
     return await this.activityRepository.find({
       where: { category },
-      order: { activityName: 'ASC' },
+      relations: ['city'],
+      order: { rating: 'DESC' },
     });
   }
 
-  async findByLocation(location: string): Promise<Activity[]> {
+  async findByCategoryAndCity(category: ActivityCategory, cityId: number): Promise<Activity[]> {
     return await this.activityRepository.find({
-      where: { location },
-      order: { activityName: 'ASC' },
-    });
-  }
-
-  async findByCostRange(minCost: number, maxCost: number): Promise<Activity[]> {
-    return await this.activityRepository.find({
-      where: {
-        cost: Between(minCost, maxCost),
-      },
-      order: { cost: 'ASC' },
-    });
-  }
-
-  async findByMaxCost(maxCost: number): Promise<Activity[]> {
-    return await this.activityRepository.find({
-      where: {
-        cost: LessThanOrEqual(maxCost),
-      },
-      order: { cost: 'ASC' },
+      where: { category, cityId },
+      relations: ['city'],
+      order: { rating: 'DESC' },
     });
   }
 
   async findByMinRating(minRating: number): Promise<Activity[]> {
     return await this.activityRepository.find({
-      where: {
-        rating: MoreThanOrEqual(minRating),
-      },
+      where: { rating: MoreThanOrEqual(minRating) },
+      relations: ['city'],
       order: { rating: 'DESC' },
+    });
+  }
+
+  async findByCostRange(minCost: number, maxCost: number): Promise<Activity[]> {
+    return await this.activityRepository
+      .createQueryBuilder('activity')
+      .leftJoinAndSelect('activity.city', 'city')
+      .where('activity.cost >= :minCost', { minCost })
+      .andWhere('activity.cost <= :maxCost', { maxCost })
+      .orderBy('activity.cost', 'ASC')
+      .getMany();
+  }
+
+  async searchByName(searchTerm: string): Promise<Activity[]> {
+    return await this.activityRepository.find({
+      where: { activityName: Like(`%${searchTerm}%`) },
+      relations: ['city'],
+      order: { activityName: 'ASC' },
     });
   }
 
   async findTopRated(limit: number = 10): Promise<Activity[]> {
     return await this.activityRepository.find({
+      relations: ['city'],
       order: { rating: 'DESC' },
       take: limit,
     });
   }
 
-  async searchByName(name: string): Promise<Activity[]> {
-    return await this.activityRepository
+  async countByCategory(category: ActivityCategory): Promise<number> {
+    return await this.activityRepository.count({
+      where: { category },
+    });
+  }
+
+  async countByCity(cityId: number): Promise<number> {
+    return await this.activityRepository.count({
+      where: { cityId },
+    });
+  }
+
+  async getAverageRating(): Promise<number> {
+    const result = await this.activityRepository
       .createQueryBuilder('activity')
-      .where('activity.activityName LIKE :name', { name: `%${name}%` })
-      .orderBy('activity.activityName', 'ASC')
-      .getMany();
+      .select('AVG(activity.rating)', 'avgRating')
+      .where('activity.rating IS NOT NULL')
+      .getRawOne();
+
+    return result?.avgRating || 0;
+  }
+
+  async getAverageRatingByCity(cityId: number): Promise<number> {
+    const result = await this.activityRepository
+      .createQueryBuilder('activity')
+      .select('AVG(activity.rating)', 'avgRating')
+      .where('activity.cityId = :cityId', { cityId })
+      .andWhere('activity.rating IS NOT NULL')
+      .getRawOne();
+
+    return result?.avgRating || 0;
+  }
+
+  async getAverageCost(): Promise<number> {
+    const result = await this.activityRepository
+      .createQueryBuilder('activity')
+      .select('AVG(activity.cost)', 'avgCost')
+      .where('activity.cost IS NOT NULL')
+      .getRawOne();
+
+    return result?.avgCost || 0;
   }
 
   async update(id: number, updateActivityDto: UpdateActivityDto): Promise<Activity> {
@@ -107,35 +167,5 @@ export class ActivityService {
   async remove(id: number): Promise<void> {
     const activity = await this.findOne(id);
     await this.activityRepository.remove(activity);
-  }
-
-  async countByCategory(category: ActivityCategory): Promise<number> {
-    return await this.activityRepository.count({
-      where: { category },
-    });
-  }
-
-  async countByLocation(location: string): Promise<number> {
-    return await this.activityRepository.count({
-      where: { location },
-    });
-  }
-
-  async getAverageCost(): Promise<number> {
-    const result = await this.activityRepository
-      .createQueryBuilder('activity')
-      .select('AVG(activity.cost)', 'average')
-      .getRawOne();
-
-    return result?.average || 0;
-  }
-
-  async getAverageRating(): Promise<number> {
-    const result = await this.activityRepository
-      .createQueryBuilder('activity')
-      .select('AVG(activity.rating)', 'average')
-      .getRawOne();
-
-    return result?.average || 0;
   }
 }

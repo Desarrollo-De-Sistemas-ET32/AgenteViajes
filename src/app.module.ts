@@ -21,6 +21,8 @@ import { UserTravelInterestsModule } from './user-travel-interests/user-travel-i
 import { DietaryRestrictionsModule } from './dietary-restrictions/dietary-restrictions.module';
 import { AccessibilityRequirementsModule } from './accessibility-requirements/accessibility-requirements.module';
 import { AuthModule } from './auth/auth.module';
+import { CityModule } from './city/city.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -55,6 +57,8 @@ import { AuthModule } from './auth/auth.module';
     DietaryRestrictionsModule,
     AccessibilityRequirementsModule,
     AuthModule,
+    CityModule,
+    ReviewModule,
   ],
 })
 export class AppModule {}

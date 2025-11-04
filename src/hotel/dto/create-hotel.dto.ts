@@ -15,10 +15,9 @@ export class CreateHotelDto {
   @MaxLength(100)
   hotelName: string;
 
-  @IsString()
+  @IsInt()
   @IsNotEmpty()
-  @MaxLength(100)
-  location: string;
+  cityId: number;
 
   @IsInt()
   @IsOptional()

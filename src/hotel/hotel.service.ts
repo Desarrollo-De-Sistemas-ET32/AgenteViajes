@@ -19,6 +19,7 @@ export class HotelService {
 
   async findAll(): Promise<Hotel[]> {
     return await this.hotelRepository.find({
+      relations: ['city'],
       order: { hotelName: 'ASC' },
     });
   }
@@ -26,6 +27,7 @@ export class HotelService {
   async findOne(id: number): Promise<Hotel> {
     const hotel = await this.hotelRepository.findOne({
       where: { id },
+      relations: ['city'],
     });
 
     if (!hotel) {
@@ -38,7 +40,7 @@ export class HotelService {
   async findWithTravels(id: number): Promise<Hotel> {
     const hotel = await this.hotelRepository.findOne({
       where: { id },
-      relations: ['travels'],
+      relations: ['city', 'travels'],
     });
 
     if (!hotel) {
@@ -48,9 +50,10 @@ export class HotelService {
     return hotel;
   }
 
-  async findByLocation(location: string): Promise<Hotel[]> {
+  async findByCity(cityId: number): Promise<Hotel[]> {
     return await this.hotelRepository.find({
-      where: { location: Like(`%${location}%`) },
+      where: { cityId },
+      relations: ['city'],
       order: { rating: 'DESC' },
     });
   }
@@ -58,6 +61,7 @@ export class HotelService {
   async findByStars(stars: number): Promise<Hotel[]> {
     return await this.hotelRepository.find({
       where: { stars },
+      relations: ['city'],
       order: { rating: 'DESC' },
     });
   }
@@ -65,6 +69,7 @@ export class HotelService {
   async findByMinRating(minRating: number): Promise<Hotel[]> {
     return await this.hotelRepository.find({
       where: { rating: MoreThanOrEqual(minRating) },
+      relations: ['city'],
       order: { rating: 'DESC' },
     });
   }
@@ -72,23 +77,26 @@ export class HotelService {
   async searchByName(searchTerm: string): Promise<Hotel[]> {
     return await this.hotelRepository.find({
       where: { hotelName: Like(`%${searchTerm}%`) },
+      relations: ['city'],
       order: { hotelName: 'ASC' },
     });
   }
 
   async findTopRated(limit: number = 10): Promise<Hotel[]> {
     return await this.hotelRepository.find({
+      relations: ['city'],
       order: { rating: 'DESC' },
       take: limit,
     });
   }
 
-  async findByStarsAndLocation(stars: number, location: string): Promise<Hotel[]> {
+  async findByStarsAndCity(stars: number, cityId: number): Promise<Hotel[]> {
     return await this.hotelRepository.find({
       where: {
         stars,
-        location: Like(`%${location}%`),
+        cityId,
       },
+      relations: ['city'],
       order: { rating: 'DESC' },
     });
   }
@@ -99,9 +107,9 @@ export class HotelService {
     });
   }
 
-  async countByLocation(location: string): Promise<number> {
+  async countByCity(cityId: number): Promise<number> {
     return await this.hotelRepository.count({
-      where: { location: Like(`%${location}%`) },
+      where: { cityId },
     });
   }
 
@@ -115,11 +123,11 @@ export class HotelService {
     return result?.avgRating || 0;
   }
 
-  async getAverageRatingByLocation(location: string): Promise<number> {
+  async getAverageRatingByCity(cityId: number): Promise<number> {
     const result = await this.hotelRepository
       .createQueryBuilder('hotel')
       .select('AVG(hotel.rating)', 'avgRating')
-      .where('hotel.location LIKE :location', { location: `%${location}%` })
+      .where('hotel.cityId = :cityId', { cityId })
       .andWhere('hotel.rating IS NOT NULL')
       .getRawOne();
 

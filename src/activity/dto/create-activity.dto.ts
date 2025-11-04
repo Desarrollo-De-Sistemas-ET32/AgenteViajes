@@ -1,24 +1,33 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min, Max } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsInt,
+  IsEnum,
+  IsNumber,
+  MaxLength,
+  Min,
+  Max,
+} from 'class-validator';
 import { ActivityCategory } from '../../entities/activity.entity';
 
 export class CreateActivityDto {
   @IsString()
-  @MaxLength(100)
   @IsNotEmpty()
+  @MaxLength(100)
   activityName: string;
 
-  @IsString()
-  @MaxLength(100)
+  @IsInt()
   @IsNotEmpty()
-  location: string;
+  cityId: number;
 
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 2 })
   @IsOptional()
   cost?: number;
 
   @IsString()
-  @MaxLength(45)
   @IsOptional()
+  @MaxLength(45)
   duration?: string;
 
   @IsEnum(ActivityCategory)
@@ -26,17 +35,17 @@ export class CreateActivityDto {
   category?: ActivityCategory;
 
   @IsString()
-  @MaxLength(255)
   @IsOptional()
+  @MaxLength(255)
   mediaPath?: string;
 
   @IsString()
   @IsOptional()
   description?: string;
 
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @IsOptional()
   @Min(0.0)
   @Max(5.0)
-  @IsOptional()
   rating?: number;
 }

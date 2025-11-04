@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PaymentService } from './payment.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Payments } from '../entities/payments.entity';
+import { Payment } from '../entities/payments.entity';
 import { User } from '../entities/user.entity';
 
 describe('PaymentService', () => {
@@ -13,7 +13,7 @@ describe('PaymentService', () => {
       providers: [
         PaymentService,
         {
-          provide: getRepositoryToken(Payments),
+          provide: getRepositoryToken(Payment),
           useClass: Repository,
         },
         {
