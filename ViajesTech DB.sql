@@ -2,6 +2,16 @@ DROP DATABASE IF EXISTS amelieSQL;
 CREATE DATABASE amelieSQL;
 USE amelieSQL;
 
+CREATE TABLE City (
+  ID_City INT NOT NULL AUTO_INCREMENT,
+  City_Name VARCHAR(100) NOT NULL UNIQUE,
+  Country VARCHAR(100) NOT NULL,
+  Description TEXT NULL,
+  Image_Path VARCHAR(255) NULL,
+  Average_Rating DECIMAL(3,2) NULL CHECK (Average_Rating BETWEEN 0.0 AND 5.0),
+  PRIMARY KEY (ID_City)
+);
+
 CREATE TABLE User (
   ID_User INT NOT NULL AUTO_INCREMENT,
   Name VARCHAR(45) NOT NULL,
@@ -16,6 +26,22 @@ CREATE TABLE User (
   Updated_At DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (ID_User)
 );
+
+
+CREATE TABLE Review (
+  ID_Review INT NOT NULL AUTO_INCREMENT,
+  ID_User INT NOT NULL,
+  Entity_Type ENUM('Hotel', 'Activity', 'City', 'Travel') NOT NULL,
+  Entity_ID INT NOT NULL,
+  Rating DECIMAL(3,2) NOT NULL CHECK (Rating BETWEEN 0.0 AND 5.0),
+  Review_Text TEXT NULL,
+  Created_At DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (ID_Review),
+  FOREIGN KEY (ID_User) REFERENCES User (ID_User)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
 
 CREATE TABLE Two_Factor_Auth (
   ID_2FA INT NOT NULL AUTO_INCREMENT,
@@ -33,13 +59,16 @@ CREATE TABLE Two_Factor_Auth (
 CREATE TABLE Hotel (
   ID_Hotel INT NOT NULL AUTO_INCREMENT,
   Hotel_name VARCHAR(100) NOT NULL,
-  Location VARCHAR(100) NOT NULL,
+  ID_City INT NOT NULL, 
   Stars INT NULL CHECK (Stars BETWEEN 1 AND 5),
   Image_Path VARCHAR(255) NULL,
   Description TEXT NULL,
   Amenities TEXT NULL,
   Rating DECIMAL(3,2) NULL CHECK (Rating BETWEEN 0.0 AND 5.0),
-  PRIMARY KEY (ID_Hotel)
+  PRIMARY KEY (ID_Hotel),
+  FOREIGN KEY (ID_City) REFERENCES City (ID_City)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE Flights (
@@ -96,14 +125,17 @@ CREATE TABLE Travel_Companion (
 CREATE TABLE Activity (
   ID_Activity INT NOT NULL AUTO_INCREMENT,
   Activity_Name VARCHAR(100) NOT NULL,
-  Location VARCHAR(100) NOT NULL,
+  ID_City INT NOT NULL,
   Cost DECIMAL(10,2) NULL,
   Duration VARCHAR(45) NULL,
   Category ENUM('Música', 'Historia', 'Aventura', 'Gastronomía', 'Cultura', 'Naturaleza', 'Deportes') NULL,
   Media_Path VARCHAR(255) NULL,
   Description TEXT NULL,
   Rating DECIMAL(3,2) NULL CHECK (Rating BETWEEN 0.0 AND 5.0),
-  PRIMARY KEY (ID_Activity)
+  PRIMARY KEY (ID_Activity),
+  FOREIGN KEY (ID_City) REFERENCES City (ID_City)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE Favorites (
@@ -177,7 +209,6 @@ CREATE TABLE User_has_Payments (
     ON UPDATE CASCADE
 );
 
--- Relación Travel - Hotel (N:M)
 CREATE TABLE Travel_has_Hotel (
   Travel_ID_Travel INT NOT NULL,
   Hotel_ID_Hotel INT NOT NULL,
@@ -292,3 +323,4 @@ CREATE TABLE Notifications (
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
+
