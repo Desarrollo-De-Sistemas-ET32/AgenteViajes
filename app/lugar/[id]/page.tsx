@@ -1,58 +1,95 @@
 'use client'
 
+import HotelCard from "@/components/HotelCard";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Clock, Star, Users, Camera, Calendar } from "lucide-react";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { ArrowLeft, Clock, Star, Users, Camera, Calendar, Hotel } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 
  export default function PlaceDetail(){
     const { id } = useParams();
     const router = useRouter();
 
-    const places = {
-      1: {
-        id: 1,
-        name: "París, Francia",
-        description: "La ciudad del amor con la Torre Eiffel y museos increíbles",
-        fullDescription: "París, conocida como la Ciudad de la Luz, es una de las capitales más románticas del mundo. Con sus icónicos monumentos, museos de clase mundial, y su incomparable gastronomía, París ofrece experiencias únicas para todo tipo de viajeros.",
-        duration: "3-5 días",
-        rating: 4.9,
-        image: "photo-1466442929976-97f336a657be",
-        highlights: [
-          "Torre Eiffel al atardecer",
-          "Museo del Louvre",
-          "Crucero por el Sena",
-          "Barrio de Montmartre"
-        ],
-        activities: [
-          { name: "Visita guiada Torre Eiffel", duration: "2 horas", price: "€25" },
-          { name: "Tour gastronómico", duration: "4 horas", price: "€85" },
-          { name: "Excursión a Versalles", duration: "8 horas", price: "€120" }
-        ]
-      },
-      2: {
-        id: 2,
-        name: "Tokyo, Japón",
-        description: "Cultura tradicional y moderna tecnología en perfecta armonía",
-        fullDescription: "Tokyo es una metrópolis fascinante donde los rascacielos futuristas conviven con templos tradicionales. Desde la bulliciosa vida nocturna de Shibuya hasta la serenidad de los jardines imperiales.",
-        duration: "4-6 días",
-        rating: 4.8,
-        image: "photo-1500673922987-e212871fec22",
-        highlights: [
-          "Templo Senso-ji",
-          "Cruce de Shibuya",
-          "Palacio Imperial",
-          "Distrito de Harajuku"
-        ],
-        activities: [
-          { name: "Ceremonia del té tradicional", duration: "3 horas", price: "¥8,000" },
-          { name: "Tour nocturno de Tokyo", duration: "5 horas", price: "¥12,000" },
-          { name: "Excursión al Monte Fuji", duration: "10 horas", price: "¥18,000" }
-        ]
-      }
-      // Agregar más lugares según sea necesario
-    };
+const places = {
+    1: {
+      id: 1,
+      name: "París, Francia",
+      description: "La ciudad del amor con la Torre Eiffel y museos increíbles",
+      fullDescription: "París, conocida como la Ciudad de la Luz, es una de las capitales más románticas del mundo. Con sus icónicos monumentos, museos de clase mundial, y su incomparable gastronomía, París ofrece experiencias únicas para todo tipo de viajeros.",
+      duration: "3-5 días",
+      rating: 4.9,
+      image: "photo-1466442929976-97f336a657be",
+      highlights: [
+        "Torre Eiffel al atardecer",
+        "Museo del Louvre",
+        "Crucero por el Sena",
+        "Barrio de Montmartre"
+      ],
+      activities: [
+        { name: "Visita guiada Torre Eiffel", duration: "2 horas", price: "€25" },
+        { name: "Tour gastronómico", duration: "4 horas", price: "€85" },
+        { name: "Excursión a Versalles", duration: "8 horas", price: "€120" }
+      ],
+      hotels: [
+        {
+          id: 1,
+          name: "Hotel Le Marais Boutique",
+          rating: 4.8,
+          price: "€180/noche",
+          image: "photo-1566073771259-6a8506099945",
+          location: "Le Marais, París"
+        },
+        {
+          id: 2,
+          name: "Grand Hotel des Champs-Élysées",
+          rating: 4.9,
+          price: "€320/noche",
+          image: "photo-1542314831-068cd1dbfeeb",
+          location: "Champs-Élysées, París"
+        },
+        {
+          id: 3,
+          name: "Hôtel Montmartre Charm",
+          rating: 4.6,
+          price: "€120/noche",
+          image: "photo-1445019980597-93fa8acb246c",
+          location: "Montmartre, París"
+        }
+      ]
+    },
+    2: {
+      id: 2,
+      name: "Tokyo, Japón",
+      description: "Cultura tradicional y moderna tecnología en perfecta armonía",
+      fullDescription: "Tokyo es una metrópolis fascinante donde los rascacielos futuristas conviven con templos tradicionales. Desde la bulliciosa vida nocturna de Shibuya hasta la serenidad de los jardines imperiales.",
+      duration: "4-6 días",
+      rating: 4.8,
+      image: "photo-1500673922987-e212871fec22",
+      highlights: [
+        "Templo Senso-ji",
+        "Cruce de Shibuya",
+        "Palacio Imperial",
+        "Distrito de Harajuku"
+      ],
+      activities: [
+        { name: "Ceremonia del té tradicional", duration: "3 horas", price: "¥8,000" },
+        { name: "Tour nocturno de Tokyo", duration: "5 horas", price: "¥12,000" },
+        { name: "Excursión al Monte Fuji", duration: "10 horas", price: "¥18,000" }
+      ],
+      hotels: [
+        {
+          id: 1,
+          name: "Tokyo Imperial Palace Hotel",
+          rating: 4.9,
+          price: "¥28,000/noche",
+          image: "photo-1551882547-ff40c63fe5fa",
+          location: "Chiyoda, Tokyo"
+        }
+      ]
+    }
+  };
   
     // Convert string id to number and safely access the place
     const placeId = parseInt(Array.isArray(id) ? id[0] : (id || '0'), 10);
@@ -61,7 +98,6 @@ import { useParams, useRouter } from "next/navigation";
     if (!place) {
       return (
         <div className="min-h-screen bg-background">
-          <Navbar />
           <div className="flex items-center justify-center h-96">
             <p className="text-lg text-muted-foreground">Lugar no encontrado</p>
           </div>
@@ -156,19 +192,47 @@ import { useParams, useRouter } from "next/navigation";
                 ))}
               </div>
   
-              {/* CTA Button */}
-              <div className="mt-8">
-                <Button 
-                  size="lg" 
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 transition-all duration-300"
-                >
-                  <Calendar className="h-5 w-5 mr-2" />
-                  Planificar mi viaje con Amélie
-                </Button>
-              </div>
+             {/* CTA Button */}
+            <div className="mt-8">
+              <Button 
+                size="lg" 
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 transition-all duration-300"
+              >
+                <Calendar className="h-5 w-5 mr-2" />
+                Planificar mi viaje con Amélie
+              </Button>
             </div>
           </div>
         </div>
+
+        {/* Hotels Section */}
+        {place.hotels && place.hotels.length > 0 && (
+          <div className="mt-16">
+            <div className="flex items-center gap-3 mb-8">
+              <Hotel className="h-8 w-8 text-primary" />
+              <h2 className="text-3xl font-bold">Hoteles recomendados en {place.name}</h2>
+            </div>
+            
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-4">
+                {place.hotels.map((hotel) => (
+                  <CarouselItem key={hotel.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                    <HotelCard hotel={hotel} placeId={place.id} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
+          </div>
+        )}
       </div>
-    );
-  };
+    </div>
+  );
+};

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel";
 
 const PlacesSection = () => {
+
   const places = [
     {
       id: 1,
