@@ -26,6 +26,7 @@ const API_BASE_URL = 'http://localhost:3000';
 const API_ENDPOINT = `${API_BASE_URL}/city/top-rated?limit=5`; 
 
 const PlacesSection = () => {
+feature/125
   // Estado para almacenar los lugares y el estado de carga/error
   const [places, setPlaces] = useState<Place[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -61,6 +62,51 @@ const PlacesSection = () => {
   if (places.length === 0) {
     return <div className="text-center py-10 text-lg">No se encontraron lugares destacados.</div>;
   }
+
+
+  const places = [
+    {
+      id: 1,
+      name: "París, Francia",
+      description: "La ciudad del amor con la Torre Eiffel, el Arco del Triunfo y museos increíbles",
+      duration: "3-5 días",
+      rating: 4.9,
+      image: "photo-1466442929976-97f336a657be"
+    },
+    {
+      id: 2,
+      name: "Tokyo, Japón",
+      description: "Cultura tradicional y moderna tecnología en perfecta armonía",
+      duration: "4-6 días",
+      rating: 4.8,
+      image: "photo-1500673922987-e212871fec22"
+    },
+    {
+      id: 3,
+      name: "Roma, Italia",
+      description: "Historia antigua con arquitectura impresionante y gastronomía",
+      duration: "2-4 días",
+      rating: 4.7,
+      image: "photo-1488590528505-98d2b5aba04b"
+    },
+    {
+      id: 4,
+      name: "Bali, Indonesia",
+      description: "Paraíso tropical con templos sagrados, clima asombroso y playas hermosas",
+      duration: "5-7 días",
+      rating: 4.6,
+      image: "photo-1461749280684-dccba630e2f6"
+    },
+    {
+      id: 5,
+      name: "Islandia",
+      description: "Paisajes únicos con auroras boreales, glaciares y géiseres naturales",
+      duration: "6-8 días",
+      rating: 4.8,
+      image: "photo-1517022812141-23620dba5c23"
+    }
+  ];
+develop-front
 
   return (
     <div className="mb-16">
