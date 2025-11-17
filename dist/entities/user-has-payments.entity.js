@@ -1,0 +1,40 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserHasPayments = void 0;
+const typeorm_1 = require("typeorm");
+const user_entity_1 = require("./user.entity");
+const payments_entity_1 = require("./payments.entity");
+let UserHasPayments = class UserHasPayments {
+};
+exports.UserHasPayments = UserHasPayments;
+__decorate([
+    (0, typeorm_1.PrimaryColumn)({ name: 'User_ID_User' }),
+    __metadata("design:type", Number)
+], UserHasPayments.prototype, "userId", void 0);
+__decorate([
+    (0, typeorm_1.PrimaryColumn)({ name: 'Payments_ID_Payments' }),
+    __metadata("design:type", Number)
+], UserHasPayments.prototype, "paymentsId", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, { onDelete: 'CASCADE', onUpdate: 'CASCADE' }),
+    (0, typeorm_1.JoinColumn)({ name: 'User_ID_User' }),
+    __metadata("design:type", user_entity_1.User)
+], UserHasPayments.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => payments_entity_1.Payment, { onDelete: 'CASCADE', onUpdate: 'CASCADE' }),
+    (0, typeorm_1.JoinColumn)({ name: 'Payments_ID_Payments' }),
+    __metadata("design:type", payments_entity_1.Payment)
+], UserHasPayments.prototype, "payments", void 0);
+exports.UserHasPayments = UserHasPayments = __decorate([
+    (0, typeorm_1.Entity)('User_has_Payments')
+], UserHasPayments);
+//# sourceMappingURL=user-has-payments.entity.js.map

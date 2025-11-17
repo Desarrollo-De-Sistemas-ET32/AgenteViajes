@@ -1,0 +1,31 @@
+import { Notification } from './notification.entity';
+import { Chat } from './chat.entity';
+import { Favorite } from './favorite.entity';
+import { UserTravelInterest } from './user-travel-interests.entity';
+import { DietaryRestriction } from './dietary-restrictions.entity';
+import { AccessibilityRequirement } from './accessibility-requirements.entity';
+import { UserSetting } from './user-settings.entity';
+import { Travel } from './travel.entity';
+import { Flight } from './flights.entity';
+export declare class User {
+    id: number;
+    name: string;
+    surname: string;
+    email: string;
+    password: string;
+    phoneNumber: string;
+    address: string;
+    membership: number;
+    profileImagePath: string;
+    createdAt: Date;
+    updatedAt: Date;
+    travels: Travel[];
+    flights: Flight[];
+    chats: Chat[];
+    notifications: Notification[];
+    favorites: Favorite[];
+    travelInterests: UserTravelInterest[];
+    dietaryRestrictions: DietaryRestriction[];
+    accessibilityRequirements: AccessibilityRequirement[];
+    settings: UserSetting[];
+}
