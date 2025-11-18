@@ -1,0 +1,980 @@
+// ==========================================
+// FASE 1: TABLAS INDEPENDIENTES
+// ==========================================
+
+// ========== 1. CITY ==========
+// POST: http://localhost:3000/cities
+
+// City #1
+{
+  "cityName": "Barcelona",
+  "country": "España",
+  "description": "Ciudad mediterránea conocida por su arquitectura modernista y playas",
+  "imagePath": "/images/cities/barcelona.jpg",
+  "averageRating": 4.7
+}
+
+// City #2
+{
+  "cityName": "Roma",
+  "country": "Italia",
+  "description": "La ciudad eterna, cuna de la civilización occidental",
+  "imagePath": "/images/cities/roma.jpg",
+  "averageRating": 4.8
+}
+
+// City #3
+{
+  "cityName": "Londres",
+  "country": "Reino Unido",
+  "description": "Metrópolis cosmopolita con historia milenaria",
+  "imagePath": "/images/cities/londres.jpg",
+  "averageRating": 4.6
+}
+
+// City #4
+{
+  "cityName": "Berlín",
+  "country": "Alemania",
+  "description": "Capital vibrante con una rica historia y cultura underground",
+  "imagePath": "/images/cities/berlin.jpg",
+  "averageRating": 4.5
+}
+
+// ========== 2. USER ==========
+// POST: http://localhost:3000/users
+
+// User #1
+{
+  "name": "Ana",
+  "surname": "Martínez",
+  "email": "ana.martinez@email.com",
+  "password": "SecurePass123",
+  "phoneNumber": "+34611111111",
+  "address": "Gran Vía 28, Madrid",
+  "membership": 1,
+  "profileImagePath": "/images/users/ana.jpg"
+}
+
+// User #2
+{
+  "name": "Pedro",
+  "surname": "López",
+  "email": "pedro.lopez@email.com",
+  "password": "MyPass456",
+  "phoneNumber": "+34622222222",
+  "address": "Paseo de Gracia 45, Barcelona",
+  "membership": 0,
+  "profileImagePath": "/images/users/pedro.jpg"
+}
+
+// User #3
+{
+  "name": "Sofía",
+  "surname": "García",
+  "email": "sofia.garcia@email.com",
+  "password": "Pass789Sofia",
+  "phoneNumber": "+34633333333",
+  "address": "Calle Mayor 12, Sevilla",
+  "membership": 1,
+  "profileImagePath": null
+}
+
+// User #4
+{
+  "name": "Luis",
+  "surname": "Fernández",
+  "email": "luis.fernandez@email.com",
+  "password": "LuisSecure999",
+  "phoneNumber": "+34644444444",
+  "address": "Avenida Diagonal 100, Barcelona",
+  "membership": 0,
+  "profileImagePath": null
+}
+
+// ==========================================
+// FASE 2: TABLAS QUE DEPENDEN DE CITY
+// ==========================================
+
+// ========== 3. HOTEL ==========
+// POST: http://localhost:3000/hotels
+
+// Hotel #1
+{
+  "hotelName": "Hotel Arts Barcelona",
+  "cityId": 1,
+  "stars": 5,
+  "imagePath": "/images/hotels/arts.jpg",
+  "description": "Hotel de lujo frente al mar con vistas espectaculares",
+  "amenities": "Spa, Piscina infinita, Restaurante Michelin, WiFi",
+  "rating": 4.9
+}
+
+// Hotel #2
+{
+  "hotelName": "The Savoy London",
+  "cityId": 3,
+  "stars": 5,
+  "imagePath": "/images/hotels/savoy.jpg",
+  "description": "Hotel icónico en el corazón de Londres",
+  "amenities": "Gimnasio, Restaurante, Bar, Spa, WiFi",
+  "rating": 4.8
+}
+
+// Hotel #3
+{
+  "hotelName": "Hotel Colosseum View",
+  "cityId": 2,
+  "stars": 4,
+  "imagePath": "/images/hotels/colosseum.jpg",
+  "description": "Hotel boutique con vistas al Coliseo",
+  "amenities": "Terraza panorámica, WiFi, Desayuno buffet",
+  "rating": 4.6
+}
+
+// Hotel #4
+{
+  "hotelName": "Berlin Central Hotel",
+  "cityId": 4,
+  "stars": 3,
+  "imagePath": "/images/hotels/berlin-central.jpg",
+  "description": "Hotel moderno en el centro de Berlín",
+  "amenities": "WiFi gratuito, Bar, Gimnasio",
+  "rating": 4.3
+}
+
+// ========== 4. ACTIVITY ==========
+// POST: http://localhost:3000/activities
+
+// Activity #1
+{
+  "activityName": "Tour Sagrada Familia y Park Güell",
+  "cityId": 1,
+  "cost": 45.00,
+  "duration": "4 horas",
+  "category": "Cultura",
+  "mediaPath": "/images/activities/gaudi-tour.jpg",
+  "description": "Visita guiada a las obras maestras de Gaudí",
+  "rating": 4.9
+}
+
+// Activity #2
+{
+  "activityName": "Tour Histórico del Coliseo",
+  "cityId": 2,
+  "cost": 35.00,
+  "duration": "3 horas",
+  "category": "Historia",
+  "mediaPath": "/images/activities/colosseum-tour.jpg",
+  "description": "Explora el antiguo anfiteatro romano",
+  "rating": 4.8
+}
+
+// Activity #3
+{
+  "activityName": "Pub Crawl en Berlín",
+  "cityId": 4,
+  "cost": 20.00,
+  "duration": "5 horas",
+  "category": "Música",
+  "mediaPath": "/images/activities/berlin-nightlife.jpg",
+  "description": "Descubre la vida nocturna de Berlín",
+  "rating": 4.5
+}
+
+// Activity #4
+{
+  "activityName": "Thames River Cruise",
+  "cityId": 3,
+  "cost": 30.00,
+  "duration": "2 horas",
+  "category": "Naturaleza",
+  "mediaPath": "/images/activities/thames-cruise.jpg",
+  "description": "Crucero panorámico por el río Támesis",
+  "rating": 4.6
+}
+
+// ==========================================
+// FASE 3: TABLAS QUE DEPENDEN DE USER
+// ==========================================
+
+// ========== 5. FLIGHTS ==========
+// POST: http://localhost:3000/flights
+
+// Flight #1
+{
+  "idUser": 1,
+  "flightNumber": "VY2250",
+  "airline": "Vueling",
+  "origin": "Madrid",
+  "destination": "Barcelona",
+  "departureDate": "2025-04-15T08:00:00Z",
+  "arrivalDate": "2025-04-15T09:15:00Z",
+  "totalCost": 89.99,
+  "class": "Economy",
+  "status": "Booked"
+}
+
+// Flight #2
+{
+  "idUser": 2,
+  "flightNumber": "BA456",
+  "airline": "British Airways",
+  "origin": "Madrid",
+  "destination": "Londres",
+  "departureDate": "2025-05-10T10:30:00Z",
+  "arrivalDate": "2025-05-10T12:00:00Z",
+  "totalCost": 175.50,
+  "class": "Premium",
+  "status": "Confirmed"
+}
+
+// Flight #3
+{
+  "idUser": 3,
+  "flightNumber": "AZ789",
+  "airline": "Alitalia",
+  "origin": "Barcelona",
+  "destination": "Roma",
+  "departureDate": "2025-06-01T14:00:00Z",
+  "arrivalDate": "2025-06-01T16:10:00Z",
+  "totalCost": 120.00,
+  "class": "Economy",
+  "status": "Booked"
+}
+
+// Flight #4
+{
+  "idUser": 4,
+  "flightNumber": "LH321",
+  "airline": "Lufthansa",
+  "origin": "Madrid",
+  "destination": "Berlín",
+  "departureDate": "2025-07-20T06:00:00Z",
+  "arrivalDate": "2025-07-20T09:00:00Z",
+  "totalCost": 145.75,
+  "class": "Business",
+  "status": "Confirmed"
+}
+
+// ========== 6. TRAVEL ==========
+// POST: http://localhost:3000/travels
+
+// Travel #1
+{
+  "idUser": 1,
+  "travelName": "Escapada a Barcelona",
+  "destination": "Barcelona",
+  "startDate": "2025-04-15T00:00:00Z",
+  "endDate": "2025-04-20T00:00:00Z",
+  "totalCost": 1200.00,
+  "documentPath": "/docs/travel-barcelona.pdf",
+  "status": "Planning",
+  "travelStyle": "Preferred",
+  "accommodationType": "Hotel de Lujo"
+}
+
+// Travel #2
+{
+  "idUser": 2,
+  "travelName": "Viaje Cultural a Londres",
+  "destination": "Londres",
+  "startDate": "2025-05-10T00:00:00Z",
+  "endDate": "2025-05-17T00:00:00Z",
+  "totalCost": 2100.50,
+  "documentPath": "/docs/travel-london.pdf",
+  "status": "Confirmed",
+  "travelStyle": "Preferred",
+  "accommodationType": "Boutique Hotel"
+}
+
+// Travel #3
+{
+  "idUser": 3,
+  "travelName": "Tour Histórico Roma",
+  "destination": "Roma",
+  "startDate": "2025-06-01T00:00:00Z",
+  "endDate": "2025-06-07T00:00:00Z",
+  "totalCost": 1800.00,
+  "documentPath": null,
+  "status": "Planning",
+  "travelStyle": "Alternative",
+  "accommodationType": "Apartamento"
+}
+
+// Travel #4
+{
+  "idUser": 4,
+  "travelName": "Aventura en Berlín",
+  "destination": "Berlín",
+  "startDate": "2025-07-20T00:00:00Z",
+  "endDate": "2025-07-28T00:00:00Z",
+  "totalCost": 1500.00,
+  "documentPath": "/docs/travel-berlin.pdf",
+  "status": "Planning",
+  "travelStyle": "Preferred",
+  "accommodationType": "Hostal"
+}
+
+// ========== 7. CHAT ==========
+// POST: http://localhost:3000/chats
+
+// Chat #1
+{
+  "idUser": 1,
+  "chatTitle": "Consulta sobre Barcelona",
+  "status": "Active"
+}
+
+// Chat #2
+{
+  "idUser": 2,
+  "chatTitle": "Ayuda con reserva de hotel",
+  "status": "Active"
+}
+
+// Chat #3
+{
+  "idUser": 3,
+  "chatTitle": "Cambio de vuelo a Roma",
+  "status": "Closed"
+}
+
+// Chat #4
+{
+  "idUser": 4,
+  "chatTitle": "Información sobre actividades",
+  "status": "Active"
+}
+
+// ========== 8. TWO_FACTOR_AUTH ==========
+// POST: http://localhost:3000/two-factor-auth (si tienes el CRUD)
+
+// 2FA #1
+{
+  "idUser": 1,
+  "secretKey": "SECRET_ANA_XYZ123",
+  "isEnabled": 1,
+  "backupCodes": "111111,222222,333333,444444,555555"
+}
+
+// 2FA #2
+{
+  "idUser": 2,
+  "secretKey": "SECRET_PEDRO_ABC456",
+  "isEnabled": 0,
+  "backupCodes": null
+}
+
+// 2FA #3
+{
+  "idUser": 3,
+  "secretKey": "SECRET_SOFIA_DEF789",
+  "isEnabled": 1,
+  "backupCodes": "666666,777777,888888,999999,000000"
+}
+
+// 2FA #4
+{
+  "idUser": 4,
+  "secretKey": "SECRET_LUIS_GHI012",
+  "isEnabled": 1,
+  "backupCodes": "AAAAA,BBBBB,CCCCC,DDDDD,EEEEE"
+}
+
+// ========== 9. NOTIFICATIONS ==========
+// POST: http://localhost:3000/notifications
+
+// Notification #1
+{
+  "idUser": 1,
+  "title": "¡Bienvenida Ana!",
+  "message": "Gracias por registrarte en nuestra plataforma de viajes",
+  "type": "Info",
+  "relatedEntityType": null,
+  "relatedEntityId": null
+}
+
+// Notification #2
+{
+  "idUser": 2,
+  "title": "Vuelo Confirmado",
+  "message": "Tu vuelo BA456 a Londres ha sido confirmado",
+  "type": "Success",
+  "relatedEntityType": "Flight",
+  "relatedEntityId": 2
+}
+
+// Notification #3
+{
+  "idUser": 3,
+  "title": "Recordatorio de Pago",
+  "message": "Tu viaje a Roma requiere confirmación de pago",
+  "type": "Warning",
+  "relatedEntityType": "Travel",
+  "relatedEntityId": 3
+}
+
+// Notification #4
+{
+  "idUser": 4,
+  "title": "Actualización de Itinerario",
+  "message": "Se ha añadido una nueva actividad a tu viaje a Berlín",
+  "type": "Info",
+  "relatedEntityType": "Activity",
+  "relatedEntityId": 3
+}
+
+// ========== 10. ACCESSIBILITY_REQUIREMENTS ==========
+// POST: http://localhost:3000/accessibility-requirements
+
+// Accessibility #1
+{
+  "idUser": 1,
+  "requirementType": "Acceso para silla de ruedas",
+  "details": "Necesita habitaciones adaptadas y acceso sin escaleras"
+}
+
+// Accessibility #2
+{
+  "idUser": 2,
+  "requirementType": "Asistencia visual",
+  "details": "Requiere señalización en braille"
+}
+
+// Accessibility #3
+{
+  "idUser": 3,
+  "requirementType": "Asistencia auditiva",
+  "details": "Necesita alarmas visuales en habitaciones"
+}
+
+// Accessibility #4
+{
+  "idUser": 4,
+  "requirementType": "Acceso para silla de ruedas",
+  "details": "Requiere transporte adaptado"
+}
+
+// ========== 11. DIETARY_RESTRICTIONS ==========
+// POST: http://localhost:3000/dietary-restrictions
+
+// Dietary #1
+{
+  "idUser": 1,
+  "restrictionType": "Vegano",
+  "details": "No consume productos de origen animal"
+}
+
+// Dietary #2
+{
+  "idUser": 2,
+  "restrictionType": "Sin gluten",
+  "details": "Celiaquía diagnosticada"
+}
+
+// Dietary #3
+{
+  "idUser": 3,
+  "restrictionType": "Vegetariano",
+  "details": null
+}
+
+// Dietary #4
+{
+  "idUser": 4,
+  "restrictionType": "Alérgico alimentarios",
+  "details": "Alérgico a mariscos y frutos secos"
+}
+
+// ========== 12. USER_TRAVEL_INTERESTS ==========
+// POST: http://localhost:3000/user-travel-interests
+
+// Interest #1
+{
+  "idUser": 1,
+  "interestCategory": "Cultura",
+  "priority": 5
+}
+
+// Interest #2
+{
+  "idUser": 2,
+  "interestCategory": "Historia",
+  "priority": 4
+}
+
+// Interest #3
+{
+  "idUser": 3,
+  "interestCategory": "Gastronomía",
+  "priority": 5
+}
+
+// Interest #4
+{
+  "idUser": 4,
+  "interestCategory": "Aventura",
+  "priority": 3
+}
+
+// ========== 13. USER_SETTINGS ==========
+// POST: http://localhost:3000/user-settings
+
+// Setting #1
+{
+  "idUser": 1,
+  "settingKey": "language",
+  "settingValue": "es-ES"
+}
+
+// Setting #2
+{
+  "idUser": 2,
+  "settingKey": "currency",
+  "settingValue": "EUR"
+}
+
+// Setting #3
+{
+  "idUser": 3,
+  "settingKey": "theme",
+  "settingValue": "dark"
+}
+
+// Setting #4
+{
+  "idUser": 4,
+  "settingKey": "notifications_push",
+  "settingValue": "true"
+}
+
+// ========== 14. FAVORITES ==========
+// POST: http://localhost:3000/favorites
+
+// Favorite #1
+{
+  "idUser": 1,
+  "entityType": "Hotel",
+  "entityId": 1
+}
+
+// Favorite #2
+{
+  "idUser": 2,
+  "entityType": "Activity",
+  "entityId": 4
+}
+
+// Favorite #3
+{
+  "idUser": 3,
+  "entityType": "Destination",
+  "entityId": 2
+}
+
+// Favorite #4
+{
+  "idUser": 4,
+  "entityType": "Travel",
+  "entityId": 4
+}
+
+// ========== 15. REVIEW ==========
+// POST: http://localhost:3000/reviews
+
+// Review #1
+{
+  "idUser": 1,
+  "entityType": "Hotel",
+  "entityId": 1,
+  "rating": 4.8,
+  "reviewText": "Excelente hotel, vistas increíbles y servicio impecable"
+}
+
+// Review #2
+{
+  "idUser": 2,
+  "entityType": "Activity",
+  "entityId": 1,
+  "rating": 4.5,
+  "reviewText": "Tour muy completo, guía muy conocedor"
+}
+
+// Review #3
+{
+  "idUser": 3,
+  "entityType": "City",
+  "entityId": 2,
+  "rating": 5.0,
+  "reviewText": "Roma es simplemente mágica, cada rincón es historia"
+}
+
+// Review #4
+{
+  "idUser": 4,
+  "entityType": "Travel",
+  "entityId": 4,
+  "rating": 4.3,
+  "reviewText": "Viaje bien organizado, aunque algunos horarios fueron apretados"
+}
+
+// ==========================================
+// FASE 4: TABLAS QUE DEPENDEN DE PAYMENTS
+// ==========================================
+
+// ========== 16. PAYMENTS ==========
+// POST: http://localhost:3000/payments
+
+// Payment #1
+{
+  "status": "Completed",
+  "paymentDate": "2025-03-01T10:00:00Z",
+  "paymentMethod": "Credit Card",
+  "transactionCode": "TRX-2025-001",
+  "amount": 89.99,
+  "currency": "EUR",
+  "entityType": "Flight",
+  "entityId": 1
+}
+
+// Payment #2
+{
+  "status": "Completed",
+  "paymentDate": "2025-03-05T14:30:00Z",
+  "paymentMethod": "PayPal",
+  "transactionCode": "TRX-2025-002",
+  "amount": 1200.00,
+  "currency": "EUR",
+  "entityType": "Travel",
+  "entityId": 1
+}
+
+// Payment #3
+{
+  "status": "Pending",
+  "paymentDate": null,
+  "paymentMethod": "Bank Transfer",
+  "transactionCode": "TRX-2025-003",
+  "amount": 175.50,
+  "currency": "EUR",
+  "entityType": "Flight",
+  "entityId": 2
+}
+
+// Payment #4
+{
+  "status": "Completed",
+  "paymentDate": "2025-03-10T09:15:00Z",
+  "paymentMethod": "Credit Card",
+  "transactionCode": "TRX-2025-004",
+  "amount": 45.00,
+  "currency": "EUR",
+  "entityType": "Activity",
+  "entityId": 1
+}
+
+// ==========================================
+// FASE 5: TABLAS QUE DEPENDEN DE CHAT
+// ==========================================
+
+// ========== 17. MESSAGE ==========
+// POST: http://localhost:3000/messages
+
+// Message #1
+{
+  "chatId": 1,
+  "sender": "user",
+  "content": "Hola, necesito información sobre hoteles en Barcelona",
+  "messageType": "text",
+  "metadata": {
+    "timestamp": "2025-03-15T10:00:00Z",
+    "device": "mobile"
+  }
+}
+
+// Message #2
+{
+  "chatId": 1,
+  "sender": "bot",
+  "content": "¡Hola! Claro, ¿qué tipo de hotel buscas?",
+  "messageType": "text",
+  "metadata": {
+    "timestamp": "2025-03-15T10:00:30Z",
+    "intent": "hotel_search"
+  }
+}
+
+// Message #3
+{
+  "chatId": 2,
+  "sender": "user",
+  "content": "¿Puedo cambiar la fecha de mi reserva?",
+  "messageType": "text",
+  "metadata": {
+    "timestamp": "2025-03-16T15:20:00Z"
+  }
+}
+
+// Message #4
+{
+  "chatId": 4,
+  "sender": "user",
+  "content": "¿Qué actividades recomiendan en Berlín?",
+  "messageType": "text",
+  "metadata": {
+    "timestamp": "2025-03-17T11:45:00Z",
+    "device": "web"
+  }
+}
+
+// ==========================================
+// FASE 6: TABLAS QUE DEPENDEN DE TRAVEL
+// ==========================================
+
+// ========== 18. TRAVEL_COMPANION ==========
+// POST: http://localhost:3000/travel-companions
+
+// Companion #1
+{
+  "travelId": 1,
+  "name": "Carmen",
+  "surname": "Ruiz",
+  "email": "carmen.ruiz@email.com",
+  "phoneNumber": "+34655555555",
+  "relationship": "Partner"
+}
+
+// Companion #2
+{
+  "travelId": 2,
+  "name": "Alberto",
+  "surname": "Díaz",
+  "email": "alberto.diaz@email.com",
+  "phoneNumber": "+34666666666",
+  "relationship": "Friend"
+}
+
+// Companion #3
+{
+  "travelId": 3,
+  "name": "Isabel",
+  "surname": "Moreno",
+  "email": "isabel.moreno@email.com",
+  "phoneNumber": "+34677777777",
+  "relationship": "Family"
+}
+
+// Companion #4
+{
+  "travelId": 4,
+  "name": "Roberto",
+  "surname": "Sánchez",
+  "email": "roberto.sanchez@email.com",
+  "phoneNumber": "+34688888888",
+  "relationship": "Friend"
+}
+
+// ==========================================
+// FASE 7: TABLAS DE RELACIÓN (N:M)
+// ==========================================
+
+// ========== 19. TRAVEL_HAS_HOTEL ==========
+// POST: http://localhost:3000/travel-has-hotel
+
+// TravelHotel #1
+{
+  "travelId": 1,
+  "hotelId": 1,
+  "checkInDate": "2025-04-15T15:00:00Z",
+  "checkOutDate": "2025-04-20T11:00:00Z",
+  "roomType": "Suite Deluxe",
+  "numberOfRooms": 1
+}
+
+// TravelHotel #2
+{
+  "travelId": 2,
+  "hotelId": 2,
+  "checkInDate": "2025-05-10T14:00:00Z",
+  "checkOutDate": "2025-05-17T12:00:00Z",
+  "roomType": "Double Superior",
+  "numberOfRooms": 2
+}
+
+// TravelHotel #3
+{
+  "travelId": 3,
+  "hotelId": 3,
+  "checkInDate": "2025-06-01T15:00:00Z",
+  "checkOutDate": "2025-06-07T11:00:00Z",
+  "roomType": "Standard",
+  "numberOfRooms": 1
+}
+
+// TravelHotel #4
+{
+  "travelId": 4,
+  "hotelId": 4,
+  "checkInDate": "2025-07-20T16:00:00Z",
+  "checkOutDate": "2025-07-28T10:00:00Z",
+  "roomType": "Economy",
+  "numberOfRooms": 1
+}
+
+// ========== 20. TRAVEL_HAS_FLIGHT ==========
+// POST: http://localhost:3000/travel-has-flight
+
+// TravelFlight #1
+{
+  "travelId": 1,
+  "flightId": 1,
+  "flightType": "Outbound"
+}
+
+// TravelFlight #2
+{
+  "travelId": 2,
+  "flightId": 2,
+  "flightType": "Outbound"
+}
+
+// TravelFlight #3
+{
+  "travelId": 3,
+  "flightId": 3,
+  "flightType": "Return"
+}
+
+// TravelFlight #4
+{
+  "travelId": 4,
+  "flightId": 4,
+  "flightType": "Outbound"
+}
+
+// ========== 21. TRAVEL_HAS_ACTIVITY ==========
+// POST: http://localhost:3000/travel-has-activity
+
+// TravelActivity #1
+{
+  "travelId": 1,
+  "activityId": 1,
+  "scheduledDate": "2025-04-17T10:00:00Z",
+  "numberOfParticipants": 2,
+  "specialRequirements": "Guía en español"
+}
+
+// TravelActivity #2
+{
+  "travelId": 2,
+  "activityId": 4,
+  "scheduledDate": "2025-05-12T14:00:00Z",
+  "numberOfParticipants": 3,
+  "specialRequirements": null
+}
+
+// TravelActivity #3
+{
+  "travelId": 3,
+  "activityId": 2,
+  "scheduledDate": "2025-06-03T09:00:00Z",
+  "numberOfParticipants": 2,
+  "specialRequirements": "Acceso prioritario"
+}
+
+// TravelActivity #4
+{
+  "travelId": 4,
+  "activityId": 3,
+  "scheduledDate": "2025-07-22T20:00:00Z",
+  "numberOfParticipants": 2,
+  "specialRequirements": null
+}
+
+// ========== 22. USER_HAS_PAYMENTS ==========
+// POST: http://localhost:3000/user-has-payments
+
+// UserPayment #1
+{
+  "idUser": 1,
+  "paymentsId": 1
+}
+
+// UserPayment #2
+{
+  "idUser": 2,
+  "paymentsId": 2
+}
+
+// UserPayment #3
+{
+  "idUser": 3,
+  "paymentsId": 3
+}
+
+// UserPayment #4
+{
+  "idUser": 4,
+  "paymentsId": 4
+}
+
+// ========== 23. FILE ==========
+// POST: http://localhost:3000/files
+
+// File #1
+{
+  "entityType": "User",
+  "entityId": 1,
+  "fileName": "ana-passport.pdf",
+  "filePath": "/uploads/users/1/passport.pdf",
+  "fileType": "application/pdf",
+  "fileSize": 512000
+}
+
+// File #2
+{
+  "entityType": "Travel",
+  "entityId": 1,
+  "fileName": "itinerary-barcelona.pdf",
+  "filePath": "/uploads/travels/1/itinerary.pdf",
+  "fileType": "application/pdf",
+  "fileSize": 256000
+}
+
+// File #3
+{
+  "entityType": "Hotel",
+  "entityId": 1,
+  "fileName": "arts-gallery.jpg",
+  "filePath": "/uploads/hotels/1/gallery1.jpg",
+  "fileType": "image/jpeg",
+  "fileSize": 1024000
+}
+
+// File #4
+{
+  "entityType": "Activity",
+  "entityId": 1,
+  "fileName": "gaudi-tour-video.mp4",
+  "filePath": "/uploads/activities/1/promo.mp4",
+  "fileType": "video/mp4",
+  "fileSize": 5120000
+}
+
+// ==========================================
+// RESUMEN TOTAL: 92 SOLICITUDES (4 por cada una de las 23 tablas)
+// ==========================================
+// TODOS LOS IDs AJUSTADOS PARA EMPEZAR DESDE 1
+// 
+// ORDEN DE EJECUCIÓN:
+// FASE 1: City, User (1-2)
+// FASE 2: Hotel, Activity (3-4)
+// FASE 3: Flights, Travel, Chat, 2FA, Notifications, 
+//         Accessibility, Dietary, Interests, Settings, 
+//         Favorites, Review (5-15)
+// FASE 4: Payments (16)
+// FASE 5: Message (17)
+// FASE 6: Travel_Companion (18)
+// FASE 7: Travel_has_Hotel, Travel_has_Flight, 
+//         Travel_has_Activity, User_has_Payments, File (19-23)
